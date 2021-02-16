@@ -1,21 +1,42 @@
 package org.example.model.entity;
 
+import java.util.List;
+
 public class Treatment {
     private Integer id;
-    private Integer patientId;
     private Patient patient;
-    private Integer categoryId;
     private Category category;
-    private Integer doctorId;
+    private Doctor doctor;
     private String diagnosis;
-    private Integer statusId;
+    private Status status;
+    private List<Procedures> proceduresList;
 
     public Treatment(){}
 
-    public Treatment(Integer patientId,Integer categoryId,Integer statusId){
-        this.patientId=patientId;
-        this.categoryId=categoryId;
-        this.statusId=statusId;
+    public Treatment(int id){
+        this.id = id;
+    }
+
+    public Treatment(Patient patient,Category category,Status status){
+        this.patient=patient;
+        this.category=category;
+        this.status=status;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public List<Procedures> getProceduresList() {
+        return proceduresList;
+    }
+
+    public void setProceduresList(List<Procedures> proceduresList) {
+        this.proceduresList = proceduresList;
     }
 
     public Integer getId() {
@@ -26,29 +47,6 @@ public class Treatment {
         this.id = id;
     }
 
-    public Integer getPatientId() {
-        return patientId;
-    }
-
-    public void setPatientId(Integer patientId) {
-        this.patientId = patientId;
-    }
-
-    public Integer getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public Integer getDoctorId() {
-        return doctorId;
-    }
-
-    public void setDoctorId(Integer doctorId) {
-        this.doctorId = doctorId;
-    }
 
     public String getDiagnosis() {
         return diagnosis;
@@ -58,13 +56,6 @@ public class Treatment {
         this.diagnosis = diagnosis;
     }
 
-    public Integer getStatusId() {
-        return statusId;
-    }
-
-    public void setStatusId(Integer statusId) {
-        this.statusId = statusId;
-    }
 
     public Patient getPatient() {
         return patient;
@@ -80,5 +71,26 @@ public class Treatment {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
+
+    @Override
+    public String toString() {
+        return "Treatment{" +
+                "id=" + id +
+                ", patient=" + patient +
+                ", category=" + category +
+                ", doctor=" + doctor +
+                ", diagnosis='" + diagnosis + '\'' +
+                ", status=" + status +
+                ", proceduresList=" + proceduresList +
+                '}';
     }
 }

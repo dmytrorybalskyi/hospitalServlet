@@ -23,11 +23,6 @@ public class JDBCCategoryDAO implements CategoryDAO {
     }
 
     @Override
-    public Category findByLogin(String login) {
-        return null;
-    }
-
-    @Override
     public Category finById(int id) {
         return null;
     }
@@ -57,14 +52,10 @@ public class JDBCCategoryDAO implements CategoryDAO {
     }
 
     @Override
-    public void update(Category entity) {
-
+    public boolean update(Category entity) {
+        return  true;
     }
 
-    @Override
-    public void delete(int id) {
-
-    }
 
     @Override
     public void close() {

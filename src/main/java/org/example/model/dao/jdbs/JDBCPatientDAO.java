@@ -17,27 +17,29 @@ public class JDBCPatientDAO implements PatientDAO {
     }
 
     @Override
-    public Patient create(Patient patient) {
+    public Patient create(Patient patient) throws SQLException{
         PreparedStatement preparedStatement = null;
         String query = "INSERT INTO patient (account_id, name, age) VALUES(?,?,?)";
         try {
+            connection.setAutoCommit(false);
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
+            JDBCAccountDAO jdbcAccountDAO = new JDBCAccountDAO(connection);
+            patient.setAccount(jdbcAccountDAO.create(patient.getAccount()));
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1,patient.getId());
-            preparedStatement.setString(2,patient.getName());
-            preparedStatement.setInt(3,patient.getAge());
+            preparedStatement.setInt(1, patient.getAccount().getId());
+            preparedStatement.setString(2, patient.getName());
+            preparedStatement.setInt(3, patient.getAge());
             preparedStatement.executeUpdate();
-        }catch (SQLException e){
-            System.out.println(e.getMessage());
-            return null;
-        }finally {
+            connection.commit();
+            return patient;
+        } catch (SQLException e) {
+            assert connection != null;
+            connection.rollback();
+            throw new SQLException(e.getMessage());
+        } finally {
             close(preparedStatement);
+            close();
         }
-        return patient;
-    }
-
-    @Override
-    public Patient findByLogin(String login) {
-        return null;
     }
 
     @Override
@@ -51,13 +53,19 @@ public class JDBCPatientDAO implements PatientDAO {
     }
 
     @Override
-    public void update(Patient entity) {
-
-    }
-
-    @Override
-    public void delete(int id) {
-
+    public boolean update(Patient patient) {
+        String query = "UPDATE patient SET doctor_account_id = ? WHERE account_id = ?";
+        PreparedStatement preparedStatement = null;
+        try{
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1,patient.getDoctor().getAccount().getId());
+            preparedStatement.setInt(2,patient.getAccount().getId());
+            preparedStatement.executeUpdate();
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }finally {
+            close(preparedStatement);
+        }return true;
     }
 
     @Override

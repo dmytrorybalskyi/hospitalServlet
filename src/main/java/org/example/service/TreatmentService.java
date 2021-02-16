@@ -4,10 +4,7 @@ import org.example.model.dao.ConnectionPoolHolder;
 import org.example.model.dao.DAOFactory;
 import org.example.model.dao.TreatmentDAO;
 import org.example.model.dao.jdbs.JDBCTreatmentDAO;
-import org.example.model.entity.Category;
-import org.example.model.entity.Treatment;
-
-import java.sql.Connection;
+import org.example.model.entity.*;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -21,6 +18,7 @@ public class TreatmentService {
 
     public boolean setDoctor(Treatment treatment, Integer doctorId) {
         JDBCTreatmentDAO jdbcTreatmentDAO = new JDBCTreatmentDAO(ConnectionPoolHolder.getConnection());
+        treatment.getPatient().setDoctor(new Doctor(new Account(doctorId)));
         jdbcTreatmentDAO.setDoctor(treatment, doctorId);
         return true;
     }
@@ -35,24 +33,14 @@ public class TreatmentService {
         return treatmentDAO.finById(id);
     }
 
-    public Treatment createTreatment(Integer accountId, Integer categoryId) throws SQLException {
-        Connection connection = ConnectionPoolHolder.getConnection();
-        try {
-            connection.setAutoCommit(false);
-            connection.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
-            JDBCTreatmentDAO jdbcTreatmentDAO = new JDBCTreatmentDAO(connection);
-            if (!jdbcTreatmentDAO.isAppointment(accountId).isEmpty()) {
-                throw new SQLException();
-            }
-            Treatment treatment = jdbcTreatmentDAO.create(new Treatment(accountId, categoryId, 1));
-            connection.commit();
-            return treatment;
-        } catch (SQLException e) {
-            throw new SQLException(e);
-        } finally {
-            if (connection != null)
-                connection.close();
-        }
+    public Treatment createTreatment(Account account, Integer categoryId) throws SQLException {
+        TreatmentDAO treatmentDAO = daoFactory.createTreatmentDAO();
+        return treatmentDAO.create(new Treatment(new Patient(account),new Category(categoryId),Status.registration));
+    }
+
+    public List<Treatment> getAllByDoctorAndStatus(Account account){
+        TreatmentDAO treatmentDAO = daoFactory.createTreatmentDAO();
+        return treatmentDAO.getAllByDoctorAndStatus(account);
     }
 
 }

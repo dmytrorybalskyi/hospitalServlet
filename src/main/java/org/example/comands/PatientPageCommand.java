@@ -14,7 +14,7 @@ public class PatientPageCommand implements Command {
       if(account==null||account.getLogin()==null){
           return "redirect:/";
       }
-      if(account.getRole().equals("patient")){
+      if(account.getRole().name().equals("patient")){
             request.setAttribute("categories",categoryService.finAll());
           return "/patient/patient.jsp";
       }else return "redirect:/";

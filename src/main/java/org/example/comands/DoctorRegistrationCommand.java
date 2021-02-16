@@ -21,7 +21,7 @@ public class DoctorRegistrationCommand implements Command{
         Integer categoryId = Integer.valueOf(request.getParameter("category"));
         try {
             doctorService.addDoctor(login,password,name,categoryId);
-            return "/patient";
+            return "/admin";
         }catch (Exception e){
             System.out.println(e.getMessage());
             return "/admin/addDoctor.jsp";

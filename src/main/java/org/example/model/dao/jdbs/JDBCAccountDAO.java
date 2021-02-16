@@ -3,6 +3,7 @@ package org.example.model.dao.jdbs;
 import org.example.model.dao.AccountDAO;
 import org.example.model.dao.ConnectionPoolHolder;
 import org.example.model.entity.Account;
+import org.example.model.entity.Roles;
 
 import java.sql.*;
 import java.util.List;
@@ -20,12 +21,12 @@ public class JDBCAccountDAO implements AccountDAO {
     public Account create(Account account) {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        String query = "INSERT INTO account (login, password, role_name) VALUES(?,?,?)";
+        String query = "INSERT INTO account (login, password, role) VALUES(?,?,?)";
         try {
             preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1,account.getLogin());
             preparedStatement.setString(2,account.getPassword());
-            preparedStatement.setString(3,account.getRole());
+            preparedStatement.setString(3,account.getRole().name());
             preparedStatement.executeUpdate();
             resultSet = preparedStatement.getGeneratedKeys();;
             if(resultSet.next()){
@@ -56,11 +57,11 @@ public class JDBCAccountDAO implements AccountDAO {
                 account.setId(rs.getInt("id"));
                 account.setLogin(rs.getString("login"));
                 account.setPassword(rs.getString("password"));
-                account.setRole(rs.getString("role_name"));
+                account.setRole(Roles.valueOf(rs.getString("role")));
             }
             return  account;
         }catch (SQLException e){
-            System.out.println(e.getErrorCode());
+            System.out.println(e.getMessage());
         }finally {
             close(rs);
             close(preparedStatement);
@@ -83,11 +84,11 @@ public class JDBCAccountDAO implements AccountDAO {
                 account.setId(rs.getInt("id"));
                 account.setLogin(rs.getString("login"));
                 account.setPassword(rs.getString("password"));
-                account.setRole(rs.getString("role_name"));
+                account.setRole(Roles.valueOf(rs.getString("role")));
             }
             return account;
         }catch (SQLException e){
-            System.out.println(e.getErrorCode());
+            System.out.println(e.getMessage());
         }finally {
             close(rs);
             close(preparedStatement);
@@ -101,13 +102,8 @@ public class JDBCAccountDAO implements AccountDAO {
     }
 
     @Override
-    public void update(Account entity) {
-
-    }
-
-    @Override
-    public void delete(int id) {
-
+    public boolean update(Account entity) {
+        return  true;
     }
 
     @Override

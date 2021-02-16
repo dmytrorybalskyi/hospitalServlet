@@ -33,7 +33,7 @@ public class LoginCommand implements Command {
         loggedUsers.add(account);
         request.getSession().setAttribute("account", account);
         request.getSession().getServletContext().setAttribute("loggedUsers", loggedUsers);
-        return "redirect:" + account.getRole();
+        return "redirect:" + account.getRole().name();
     }
 
 }

@@ -5,19 +5,19 @@ import org.example.service.TreatmentService;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class AdminPageCommand implements Command{
-    TreatmentService treatmentService = new TreatmentService();
+public class DoctorPageCommand implements Command{
+     private TreatmentService treatmentService = new TreatmentService();
 
     @Override
     public String execute(HttpServletRequest request) {
-        request.setAttribute("treatments",treatmentService.getTreatmentByStatus());
         Account account = (Account) request.getSession().getAttribute("account");
-        if(account.getLogin()==null){
+        if(account==null||account.getLogin()==null){
             return "redirect:/";
         }
-        if(account.getRole().name().equals("admin")){
-            return "/admin/admin.jsp";
+        if(account.getRole().name().equals("doctor")){
+           request.setAttribute("treatments",treatmentService.getAllByDoctorAndStatus(account));
+            return "/doctor/doctor.jsp";
         }else return "redirect:/";
     }
-}
 
+}

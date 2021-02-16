@@ -4,10 +4,14 @@ public class Account {
     private int id;
     private String login;
     private String password;
-    private String role;
+    private Roles role;
     private Patient patient;
 
     public Account(){}
+
+    public Account(int id){
+        this.id=id;
+    }
 
     public Account(String login,String password){
         this.login=login;
@@ -38,11 +42,11 @@ public class Account {
         this.password = password;
     }
 
-    public String getRole() {
+    public Roles getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Roles role) {
         this.role = role;
     }
 

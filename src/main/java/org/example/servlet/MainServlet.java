@@ -26,6 +26,7 @@ public class MainServlet extends HttpServlet {
                 commands.put("appointment", new AppointmentCommand());
                 commands.put("addDoctor", new DoctorRegistrationCommand());
                 commands.put("treatment",new SetDoctorCommand());
+                commands.put("doctor",new DoctorPageCommand());
     }
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -81,7 +81,7 @@
                <input class="form-control" type="text" placeholder="${treatment.category.name}" aria-label="Disabled input example" disabled readonly>
                  <select class="selectpicker form-control form-select-button" name="doctor" required>
                                  <c:forEach items="${doctors}" var="doctor">
-                                     <option value="${doctor.id}">${doctor.name}</option>
+                                     <option value="${doctor.account.id}">${doctor.name}</option>
                                  </c:forEach>
                        </select>
                  <button type="submit" class="btn btn-outline-dark">Set</button>

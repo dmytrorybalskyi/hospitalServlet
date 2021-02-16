@@ -1,22 +1,30 @@
 package org.example.model.entity;
 
+import java.util.List;
+
 public class Doctor {
-    private Integer id;
+    private Account account;
     private String name;
     private Integer categoryId;
     private int patientNumber;
+    private List<Treatment> treatmentLint;
+    private List<Procedures> proceduresList;
 
     public Doctor(String name, Integer categoryId){
         this.name=name;
         this.categoryId=categoryId;
     }
 
-    public Integer getId() {
-        return id;
+    public Doctor(Account account){
+        this.account = account;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     public String getName() {
@@ -41,5 +49,21 @@ public class Doctor {
 
     public void setPatientNumber(int patientNumber) {
         this.patientNumber = patientNumber;
+    }
+
+    public List<Treatment> getTreatmentLint() {
+        return treatmentLint;
+    }
+
+    public void setTreatmentLint(List<Treatment> treatmentLint) {
+        this.treatmentLint = treatmentLint;
+    }
+
+    public List<Procedures> getProceduresList() {
+        return proceduresList;
+    }
+
+    public void setProceduresList(List<Procedures> proceduresList) {
+        this.proceduresList = proceduresList;
     }
 }
