@@ -11,6 +11,10 @@ public class Procedures {
 
     public  Procedures(){}
 
+    public Procedures(String name){
+        this.name = name;
+    }
+
     public Procedures(int id){
         this.id = id;
     }

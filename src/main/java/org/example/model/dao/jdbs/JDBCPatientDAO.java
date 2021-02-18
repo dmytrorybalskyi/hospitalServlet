@@ -69,6 +69,24 @@ public class JDBCPatientDAO implements PatientDAO {
     }
 
     @Override
+    public boolean removeDoctor(Patient patient) {
+        String query = "UPDATE patient SET doctor_account_id = null WHERE account_id = ?";
+        PreparedStatement preparedStatement = null;
+        try{
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1,patient.getAccount().getId());
+            preparedStatement.executeUpdate();
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+            return false;
+        }finally {
+            close(preparedStatement);
+        }return true;
+    }
+
+
+
+    @Override
     public void close(ResultSet resultSet) {
         try {
             if(resultSet!=null)

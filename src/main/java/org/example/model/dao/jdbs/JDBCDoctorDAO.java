@@ -4,13 +4,16 @@ import org.example.model.dao.DoctorDAO;
 import org.example.model.entity.Account;
 import org.example.model.entity.Category;
 import org.example.model.entity.Doctor;
+import org.example.model.mapper.DoctorMapper;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class JDBCDoctorDAO implements DoctorDAO {
     private Connection connection;
+    private DoctorMapper doctorMapper = new DoctorMapper();
 
     public JDBCDoctorDAO(Connection connection) {
         this.connection = connection;
@@ -28,7 +31,7 @@ public class JDBCDoctorDAO implements DoctorDAO {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, doctor.getAccount().getId());
             preparedStatement.setString(2, doctor.getName());
-            preparedStatement.setInt(3, doctor.getCategoryId());
+            preparedStatement.setInt(3, doctor.getCategory().getId());
             preparedStatement.executeUpdate();
             connection.commit();
             return doctor;
@@ -53,7 +56,7 @@ public class JDBCDoctorDAO implements DoctorDAO {
             preparedStatement.setInt(1, category.getId());
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Doctor doctor = new Doctor(resultSet.getString(2), resultSet.getInt(4));
+                Doctor doctor = new Doctor(resultSet.getString(2), new Category(resultSet.getInt(4)));
                 doctor.setAccount(new Account(resultSet.getInt(1)));
                 result.add(doctor);
             }
@@ -68,8 +71,46 @@ public class JDBCDoctorDAO implements DoctorDAO {
     }
 
     @Override
+    public List<Doctor> getAllByCategoryAndNurse(Integer categoryId) {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        List<Doctor> doctorList = new LinkedList<>();
+        String query = "SELECT * FROM doctor LEFT JOIN category ON category_id = category.id WHERE category_id = ? OR category_id = ?";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1,categoryId);
+            preparedStatement.setInt(2,5);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+               doctorList.add(doctorMapper.extractFromResultSet(resultSet));
+            }
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }finally {
+            close(resultSet);
+            close(preparedStatement);
+            close();
+        }return doctorList;
+    }
+
+    @Override
     public Doctor finById(int id) {
-        return null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        String query = "SELECT * FROM doctor LEFT JOIN category ON category_id = id WHERE account_id = ?";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1,id);
+            resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()){
+                return doctorMapper.extractFromResultSet(resultSet);
+            }
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }finally {
+            close(resultSet);
+            close(preparedStatement);
+        }return null;
     }
 
     @Override

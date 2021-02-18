@@ -10,6 +10,7 @@ public abstract class DAOFactory {
     public abstract CategoryDAO createCategoryDAO();
     public abstract TreatmentDAO createTreatmentDAO();
     public abstract DoctorDAO createDoctorDAO();
+    public abstract ProceduresDAO createProceduresDAO();
 
 
     public static DAOFactory getInstance(){

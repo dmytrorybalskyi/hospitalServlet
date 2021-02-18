@@ -29,6 +29,9 @@ public class JDBCDAOFactory extends DAOFactory {
     @Override
     public DoctorDAO createDoctorDAO() { return new JDBCDoctorDAO(getConnection()); }
 
+    @Override
+    public ProceduresDAO createProceduresDAO() { return  new JDBCProceduresDAO(getConnection()); }
+
     private Connection getConnection() {
         try {
             return dataSource.getConnection();

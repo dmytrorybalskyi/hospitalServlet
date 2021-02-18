@@ -35,7 +35,7 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" href="/">Main</a>
+        <a class="nav-link active" aria-current="page" href="/admin">Main</a>
         <a class="nav-link" href="/addDoctor">Add Doctor</a>
       </div>
       <div class="navbar-nav position-absolute top-0 end-0">

@@ -16,15 +16,24 @@ import java.util.List;
 public class DoctorService {
     private DAOFactory daoFactory = DAOFactory.getInstance();
 
-    public List<Doctor> findByCategory(Category category){
+    public List<Doctor> findByCategory(Category category) {
         DoctorDAO doctorDAO = daoFactory.createDoctorDAO();
         return doctorDAO.findByCategory(category);
     }
 
-    public Doctor addDoctor(String login,String password,String name, Integer categoryId) throws SQLException {
-        Account account = new Account(login,password);
+    public List<Doctor> getAllByCategoryAndNurse(Integer categoryId) {
+        DoctorDAO doctorDAO = daoFactory.createDoctorDAO();
+        return doctorDAO.getAllByCategoryAndNurse(categoryId);
+    }
+
+    public Doctor addDoctor(String login, String password, String name, Integer categoryId) throws SQLException {
+        Account account = new Account(login, password);
         account.setRole(Roles.doctor);
-        Doctor doctor = new Doctor(name,categoryId);
+        if(categoryId==5){
+            account.setRole(Roles.nurse);
+        }
+        Category category = new Category(categoryId);
+        Doctor doctor = new Doctor(name, category);
         doctor.setAccount(account);
         DoctorDAO doctorDAO = daoFactory.createDoctorDAO();
         return doctorDAO.create(doctor);

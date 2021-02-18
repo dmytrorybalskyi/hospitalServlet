@@ -33,7 +33,7 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-              <a class="nav-link active" aria-current="page" href="/">Main</a>
+              <a class="nav-link active" aria-current="page" href="/patient">Main</a>
             </div>
             <div class="navbar-nav position-absolute top-0 end-0">
              <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
@@ -79,19 +79,19 @@
           </div>
           <div class="row">
           <div class="col">
-            <c:if test="${proceduresList.isEmpty()==false}">
+            <c:if test="${treatment.proceduresList.isEmpty()==false}">
             <h3>Treatment:</h3>
-                <p><b>Category:</b> ${proceduresList.get(0).treatment.category.name}</p>
-                <p><b>Doctor:</b> ${proceduresList.get(0).treatment.doctor.name}</p>
-                <p><b>Diagnosis:</b> ${proceduresList.get(0).treatment.diagnosis}</p>
+                <p><b>Category:</b> ${treatment.doctor.category.name}</p>
+                <p><b>Doctor:</b> ${treatment.doctor.name}</p>
+                <p><b>Diagnosis:</b> ${treatment.diagnosis}</p>
             </c:if>
           </div>
           </div>
           </div>
     </div>
     <div class="col-6">
-          <c:forEach items="${proceduresList}" var="procedures">
-                <h3>Your procedures:</h3>
+        <h3>Your procedures:</h3>
+          <c:forEach items="${treatment.proceduresList}" var="procedures">
                          <table class="table">
                               <thead>
                               <tr>
@@ -102,9 +102,9 @@
                               </thead>
                                 <form action="doProcedures" method="POST">
                                  <tr>
-                                 <td>${procedures.procedureName}</td>
-                                 <td>${procedures.type.name}</td>
-                                 <td>${procedures.status.name}</td>
+                                 <td>${procedures.name}</td>
+                                 <td>${procedures.type}</td>
+                                 <td>${procedures.status}</td>
                                  </tr>
                                  </form>
                          </table>

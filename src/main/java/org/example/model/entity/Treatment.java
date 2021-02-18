@@ -1,5 +1,6 @@
 package org.example.model.entity;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class Treatment {
@@ -9,7 +10,7 @@ public class Treatment {
     private Doctor doctor;
     private String diagnosis;
     private Status status;
-    private List<Procedures> proceduresList;
+    private List<Procedures> proceduresList = new LinkedList<>();
 
     public Treatment(){}
 

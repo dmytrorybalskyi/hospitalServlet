@@ -2,8 +2,6 @@ package org.example.servlet;
 
 import org.example.comands.*;
 import org.example.model.entity.Account;
-
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -27,6 +25,12 @@ public class MainServlet extends HttpServlet {
                 commands.put("addDoctor", new DoctorRegistrationCommand());
                 commands.put("treatment",new SetDoctorCommand());
                 commands.put("doctor",new DoctorPageCommand());
+                commands.put("diagnosis",new DiagnosisCommand());
+                commands.put("addProcedure",new AddProcedureCommand());
+                commands.put("procedure",new ProcedurePageCommand());
+                commands.put("doProcedures",new DoProceduresCommand());
+                commands.put("discharge",new DischargeCommand());
+                commands.put("nurse",new NursePageCommand());
     }
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

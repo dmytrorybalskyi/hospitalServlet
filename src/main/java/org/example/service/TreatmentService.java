@@ -43,4 +43,22 @@ public class TreatmentService {
         return treatmentDAO.getAllByDoctorAndStatus(account);
     }
 
+    public boolean setDiagnosis(String diagnosis, Integer id){
+        TreatmentDAO treatmentDAO = daoFactory.createTreatmentDAO();
+        return treatmentDAO.setDiagnosis(diagnosis,id);
+    }
+
+    public boolean discharge(Integer doctorId,Integer patientId,Integer treatmentId) throws SQLException {
+        Treatment treatment = new Treatment(treatmentId);
+        treatment.setDoctor(new Doctor( new Account(doctorId)));
+        treatment.setPatient(new Patient( new Account(patientId)));
+        TreatmentDAO treatmentDAO = daoFactory.createTreatmentDAO();
+        return treatmentDAO.discharge(treatment);
+    }
+
+    public Treatment getTreatmentByPatient(Account account){
+        TreatmentDAO treatmentDAO = daoFactory.createTreatmentDAO();
+        return treatmentDAO.findTreatmentByPatient(account.getId());
+    }
+
 }

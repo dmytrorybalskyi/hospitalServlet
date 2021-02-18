@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface DoctorDAO extends GenericDAO<Doctor>{
     List<Doctor> findByCategory(Category category);
-
+    List<Doctor> getAllByCategoryAndNurse(Integer categoryId);
 }

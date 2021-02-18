@@ -204,6 +204,72 @@ public class JDBCTreatmentDAO implements TreatmentDAO {
     }
 
     @Override
+    public boolean setDiagnosis(String diagnosis, Integer id) {
+        PreparedStatement preparedStatement = null;
+        String query = "UPDATE treatment SET diagnosis = ? WHERE id = ?";
+        try{
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1,diagnosis);
+            preparedStatement.setInt(2,id);
+            preparedStatement.executeUpdate();
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+            return false;
+        }finally {
+            close(preparedStatement);
+            close();
+        }return true;
+    }
+
+    @Override
+    public Treatment findTreatmentByPatient(Integer id) {
+        String query = "SELECT * FROM treatment LEFT JOIN category ON category_id = category.id LEFT JOIN doctor ON doctor_account_id = doctor.account_id " +
+                "LEFT JOIN procedures ON treatment.id = treatment_id WHERE patient_account_id = ? AND treatment_status = ?";
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1,id);
+            preparedStatement.setString(2,Status.treatment.name());
+            resultSet = preparedStatement.executeQuery();
+            return treatmentMapper.extractFromResultSet(resultSet);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+            return null;
+        }finally {
+            close(resultSet);
+            close(preparedStatement);
+            close();
+        }
+    }
+
+    @Override
+    public boolean discharge(Treatment treatment) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        String query = "UPDATE treatment  SET treatment_status = ? WHERE id = ?";
+        try {
+            connection.setAutoCommit(false);
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
+            JDBCDoctorDAO jdbcDoctorDAO = new JDBCDoctorDAO(connection);
+            JDBCPatientDAO jdbcPatientDAO = new JDBCPatientDAO(connection);
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1,Status.done.name());
+            preparedStatement.setInt(2,treatment.getId());
+            preparedStatement.executeUpdate();
+            jdbcPatientDAO.removeDoctor(treatment.getPatient());
+            jdbcDoctorDAO.changePatientNumber(treatment.getDoctor().getAccount().getId(), -1);
+            connection.commit();
+        } catch (SQLException e) {
+            assert connection != null;
+            connection.rollback();
+            throw new SQLException(e.getMessage());
+        } finally {
+            close(preparedStatement);
+            close();
+        } return true;
+    }
+
+    @Override
     public List<Treatment> findAll() {
         return null;
     }

@@ -5,14 +5,14 @@ import java.util.List;
 public class Doctor {
     private Account account;
     private String name;
-    private Integer categoryId;
+    private Category category;
     private int patientNumber;
     private List<Treatment> treatmentLint;
     private List<Procedures> proceduresList;
 
-    public Doctor(String name, Integer categoryId){
+    public Doctor(String name, Category category){
         this.name=name;
-        this.categoryId=categoryId;
+        this.category = category;
     }
 
     public Doctor(Account account){
@@ -35,12 +35,12 @@ public class Doctor {
         this.name = name;
     }
 
-    public Integer getCategoryId() {
-        return categoryId;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public int getPatientNumber() {

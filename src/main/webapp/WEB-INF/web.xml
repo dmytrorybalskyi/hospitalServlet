@@ -34,6 +34,11 @@
         <url-pattern>/treatment/*</url-pattern>
     </filter-mapping>
 
+    <filter-mapping>
+        <filter-name>IdFilter</filter-name>
+        <url-pattern>/addProcedure/*</url-pattern>
+    </filter-mapping>
+
     <filter>
         <filter-name>LocalFilter</filter-name>
         <filter-class>org.example.filters.LocalFilter</filter-class>

@@ -31,7 +31,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-link active" aria-current="page" href="/">Main</a>
+                    <a class="nav-link active" aria-current="page" href="/doctor">Main</a>
                     <a class="nav-link " aria-current="page" href="/procedure">Procedure</a>
                 </div>
                 <div class="navbar-nav position-absolute top-0 end-0">
@@ -45,7 +45,7 @@
                             </form>
                         </div>
                         <div class="btn-group me-2" role="group" aria-label="Second group">
-                            <form action="/logout" method="POST">
+                            <form action="/login" method="POST">
                                 <button type="submit" class="btn btn-secondary btn-sm">Sign out</button>
                             </form>
                         </div>
@@ -73,12 +73,15 @@
                     </thead>
                     <tr>
                         <td>${treatment.patient.name}</td>
-                        <form action="/diagnosis/${treatment.id}" method="POST">
+                        <form action="/diagnosis" method="POST">
+                            <td><input type="hidden" name="treatment_id" value="${treatment.id}"></td>
                             <td><input type="text" name="diagnosis" value=${treatment.diagnosis}></td>
                             <td><button type="submit" class="btn btn-primary">edit</button></td>
                         </form>
                         <td><a href="/addProcedure/${treatment.id}" class="btn btn-primary">add procedure</a></td>
-                        <form action="/discharge/${treatment.id}" method="POST">
+                        <form action="/discharge" method="POST">
+                             <input type="hidden" name="treatment_id" value="${treatment.id}">
+                             <input type="hidden" name="patient_id" value="${treatment.patient.account.id}">
                             <td><button type="submit" class="btn btn-primary">discharge</button></td>
                         </form>
                     </tr>
@@ -89,7 +92,7 @@
                     </tr>
                     <c:forEach items="${treatment.proceduresList}" var="procedures">
                         <tr>
-                            <td>${procedures.procedureName}</td>
+                            <td>${procedures.name}</td>
                             <td>${procedures.type}</td>
                             <td>${procedures.status}</td>
                         </tr>
