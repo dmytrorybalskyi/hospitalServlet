@@ -29,14 +29,14 @@
 <div class="container-fluid">
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand">Hospital</a>
+    <a class="navbar-brand"><fmt:message key="label.hospital"/></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" href="/admin">Main</a>
-        <a class="nav-link" href="/addDoctor">Add Doctor</a>
+        <a class="nav-link active" aria-current="page" href="/admin/admin"><fmt:message key="label.main"/></a>
+        <a class="nav-link" href="/admin/addDoctor"><fmt:message key="label.addDoctor"/></a>
       </div>
       <div class="navbar-nav position-absolute top-0 end-0">
        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
@@ -50,7 +50,7 @@
         </div>
        <div class="btn-group me-2" role="group" aria-label="Second group">
            <form action="/login" method="POST">
-                 <button type="submit" class="btn btn-secondary btn-sm">sing out</button>
+                 <button type="submit" class="btn btn-secondary btn-sm"><fmt:message key="label.signOut"/></button>
            </form>
        </div>
      </div>
@@ -64,19 +64,19 @@
 <div class="container">
 <div class="row">
 <div class="col-8">
+    <table class="table">
+        <thead>
+        <tr>
+            <td><b><fmt:message key="label.name"/></b></td>
+            <td><b><fmt:message key="label.category"/></b></td>
+            <td><b><fmt:message key="label.doctor"/></b></td>
+        </tr>
+        </thead>
          <c:forEach items="${treatments}" var="treatment">
-             <table class="table">
-                  <thead>
-                  <tr>
-                      <td><b>Name</b></td>
-                      <td><b>Category</b></td>
-                      <td><b>Doctor</b></td>
-                  </tr>
-                  </thead>
              <tr>
                  <td>${treatment.patient.name}</td>
                  <td>${treatment.category.name}</td>
-                 <td><a class="btn btn-primary" href="/treatment/${treatment.id}">set</a></td>
+                 <td><a class="btn btn-primary" href="/admin/treatment/${treatment.id}"><fmt:message key="label.set"/></a></td>
              </tr>
          </form>
          </c:forEach>
@@ -87,7 +87,7 @@
        <c:if test="${pages ne null}">
        <c:if test="${pages>1}">
          <c:forEach var="i" begin="1" end="${pages}">
-               <li class="page-item"><a class="page-link" href="/?page=<c:out value="${i-1}"/>"><c:out value="${i}"/></a></li>
+               <li class="page-item"><a class="page-link" href="/admin/admin/page=<c:out value="${i-1}"/>"><c:out value="${i}"/></a></li>
          </c:forEach>
        </c:if>
        </c:if>

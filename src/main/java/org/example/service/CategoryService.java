@@ -13,4 +13,9 @@ public class CategoryService {
         CategoryDAO categoryDAO = daoFactory.createCategoryDAO();
         return categoryDAO.findAll();
     }
+
+    public List<Category> finAllWithoutNurse(){
+        CategoryDAO categoryDAO = daoFactory.createCategoryDAO();
+        return categoryDAO.findAllWithoutNurse();
+    }
 }

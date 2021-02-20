@@ -13,14 +13,10 @@ public class PatientPageCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
-      Account account = (Account) request.getSession().getAttribute("account");
-      if(account==null||account.getLogin()==null){
-          return "redirect:/";
-      }
-      if(account.getRole().name().equals("patient")){
-            request.setAttribute("categories",categoryService.finAll());
-            request.setAttribute("treatment",treatmentService.getTreatmentByPatient(account));
-          return "/patient/patient.jsp";
-      }else return "redirect:/";
+        Account account = (Account) request.getSession().getAttribute("account");
+        request.setAttribute("categories", categoryService.finAllWithoutNurse());
+        request.setAttribute("treatment", treatmentService.getTreatmentByPatient(account));
+        return "/patient/patient.jsp";
     }
+
 }

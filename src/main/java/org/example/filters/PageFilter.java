@@ -1,11 +1,13 @@
 package org.example.filters;
 
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class LocalFilter implements Filter {
+public class PageFilter implements Filter {
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -15,11 +17,14 @@ public class LocalFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
-        String language = req.getParameter("lang");
-        if(language==null){
-            req.getSession().setAttribute("lang","en");
+        String path =  req.getRequestURI();
+        String page = path.replaceAll(".*/admin/page=","");
+        if(page.equals("/admin/admin")){
+            req.getSession().setAttribute("page", 0);
+        }else {
+            Integer pageNumber = Integer.valueOf(page);
+            req.getSession().setAttribute("page",pageNumber);
         }
-        req.getSession().setAttribute("lang",language);
         filterChain.doFilter(req,resp);
     }
 
@@ -28,3 +33,4 @@ public class LocalFilter implements Filter {
 
     }
 }
+

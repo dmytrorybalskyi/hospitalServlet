@@ -20,6 +20,6 @@ public class SetDoctorCommand implements Command{
             return "/admin/treatment.jsp";
         }
         treatmentService.setDoctor(treatment,Integer.valueOf(doctor));
-        return "redirect:admin";
+        return "redirect:admin/admin";
     }
 }

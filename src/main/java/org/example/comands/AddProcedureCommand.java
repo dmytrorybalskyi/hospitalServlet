@@ -1,5 +1,6 @@
 package org.example.comands;
 
+import org.example.model.entity.Account;
 import org.example.model.entity.Doctor;
 import org.example.model.entity.Treatment;
 import org.example.model.entity.Types;
@@ -35,7 +36,7 @@ public class AddProcedureCommand implements Command{
             System.out.println(e.getMessage());
             return "/doctor/addProcedure.jsp";
         }
-        return "redirect:doctor";
+        return "redirect:doctor/doctor";
     }
 
 }

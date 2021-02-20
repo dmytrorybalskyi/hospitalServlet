@@ -10,7 +10,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import java.util.*;
-
+//TODO: VALIDATION --> X
+//TODO: LOCALIZATION --> X
+//TODO: GET PATIENT NAME FROM PROCEDURES QUERY --> X
+//TODO: REFACTOR ACCOUNT FIELD IN PATIENT AND DOCTOR -->
+//TODO: REFACTOR RESULT SET WITH MAPPER -->
+//TODO: TESTS -->
+//TODO: AUTHENTICATION FILTER --> X
+//TODO: BUILDER-? -->
+//TODO: SET DOCTOR CHECKING -->
 public class MainServlet extends HttpServlet {
     private Map<String, Command> commands = new HashMap<>();
 
@@ -19,18 +27,19 @@ public class MainServlet extends HttpServlet {
                 .setAttribute("loggedUsers", new HashSet<Account>());
                 commands.put("login", new LoginCommand());
                 commands.put("registration", new RegistrationPageCommand());
-                commands.put("patient", new PatientPageCommand());
-                commands.put("admin", new AdminPageCommand());
-                commands.put("appointment", new AppointmentCommand());
-                commands.put("addDoctor", new DoctorRegistrationCommand());
-                commands.put("treatment",new SetDoctorCommand());
-                commands.put("doctor",new DoctorPageCommand());
+                commands.put("patient/patient", new PatientPageCommand());
+                commands.put("admin/admin", new AdminPageCommand());
+                commands.put("patient/appointment", new AppointmentCommand());
+                commands.put("admin/addDoctor", new DoctorRegistrationCommand());
+                commands.put("admin/treatment",new SetDoctorCommand());
+                commands.put("doctor/doctor",new DoctorPageCommand());
                 commands.put("diagnosis",new DiagnosisCommand());
-                commands.put("addProcedure",new AddProcedureCommand());
-                commands.put("procedure",new ProcedurePageCommand());
-                commands.put("doProcedures",new DoProceduresCommand());
+                commands.put("doctor/addProcedure",new AddProcedureCommand());
+                commands.put("doctor/procedure",new ProcedurePageCommand());
+                commands.put("doctor/doProcedures",new DoProceduresCommand());
+                commands.put("nurse/doProcedures",new DoProceduresCommand());
                 commands.put("discharge",new DischargeCommand());
-                commands.put("nurse",new NursePageCommand());
+                commands.put("nurse/nurse",new NursePageCommand());
     }
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -47,7 +56,10 @@ public class MainServlet extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String path = request.getRequestURI();
-        path = path.replaceFirst("/", "").replaceAll("/.*","");
+        System.out.println(path);
+        path = path.replaceFirst("/", "").replaceAll("/page=\\d+","")
+                .replaceAll("/\\d+","");
+        System.out.println(path);
         Command command = commands.getOrDefault(path,
                 (r) -> "/index.jsp");
         System.out.println(command.getClass().getName());

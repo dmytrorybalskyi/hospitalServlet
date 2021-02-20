@@ -3,12 +3,14 @@ package org.example.model.dao.jdbs;
 import org.example.model.dao.TreatmentDAO;
 import org.example.model.entity.*;
 import org.example.model.mapper.PatientMapper;
+import org.example.model.mapper.ProceduresMapper;
 import org.example.model.mapper.TreatmentMapper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,6 +19,7 @@ public class JDBCTreatmentDAO implements TreatmentDAO {
     private Connection connection;
     private PatientMapper patientMapper = new PatientMapper();
     private TreatmentMapper treatmentMapper = new TreatmentMapper();
+    private ProceduresMapper proceduresMapper = new ProceduresMapper();
 
     public JDBCTreatmentDAO(Connection connection) {
         this.connection = connection;
@@ -29,7 +32,8 @@ public class JDBCTreatmentDAO implements TreatmentDAO {
         try {
             connection.setAutoCommit(false);
             connection.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
-            if(!isAppointment(treatment.getPatient().getAccount().getId())){
+            if (!isAppointment(treatment.getPatient().getAccount().getId())) {
+                close();
                 throw new SQLException("you already appointment");
             }
             preparedStatement = connection.prepareStatement(query);
@@ -39,7 +43,7 @@ public class JDBCTreatmentDAO implements TreatmentDAO {
             preparedStatement.executeUpdate();
             connection.commit();
             return treatment;
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             assert connection != null;
             connection.rollback();
             throw new SQLException(e.getMessage());
@@ -103,22 +107,24 @@ public class JDBCTreatmentDAO implements TreatmentDAO {
     }
 
     @Override
-    public List<Treatment> findByStatus() {
-        List<Treatment> result = new LinkedList<>();
+    public Page pageByStatus(Page page) {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        String query = "SELECT * FROM treatment LEFT JOIN patient ON patient_account_id = account_id LEFT JOIN category ON category_id = category.id  WHERE treatment_status = ?";
+        String query = "SELECT * FROM treatment LEFT JOIN patient ON patient_account_id = account_id LEFT JOIN category ON category_id = category.id  WHERE treatment_status = ? LIMIT ?, ?";
         try {
+            page = getPageNumber(page);
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1,Status.registration.name() );
+            preparedStatement.setString(1, Status.registration.name());
+            preparedStatement.setInt(2, page.getPage() * page.getObjectsOnPage());
+            preparedStatement.setInt(3, page.getObjectsOnPage());
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Treatment treatment = new Treatment(
                         patientMapper.extractFromResultSet(resultSet),
-                        new Category(resultSet.getInt("category.id"),resultSet.getString("category.name")),
+                        new Category(resultSet.getInt("category.id"), resultSet.getString("category.name")),
                         Status.valueOf(resultSet.getString("treatment_status")));
                 treatment.setId(resultSet.getInt("treatment.id"));
-                result.add(treatment);
+                page.getList().add(treatment);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -127,7 +133,28 @@ public class JDBCTreatmentDAO implements TreatmentDAO {
             close(preparedStatement);
             close();
         }
-        return result;
+        return page;
+    }
+
+    @Override
+    public Page getPageNumber(Page page) {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        String query = "SELECT COUNT(id) FROM treatment WHERE treatment_status = ?";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, "registration");
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                page.setTotalPages(resultSet.getInt("COUNT(id)"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            close(preparedStatement);
+            close(resultSet);
+        }
+        return page;
     }
 
 
@@ -183,19 +210,24 @@ public class JDBCTreatmentDAO implements TreatmentDAO {
     }
 
     @Override
-    public List<Treatment> getAllByDoctorAndStatus(Account account) {
+    public Deque<Treatment> getAllByDoctorAndStatus(Account account) {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         String query = "SELECT * FROM treatment LEFT JOIN patient ON patient_account_id = account_id LEFT JOIN procedures ON treatment_id = treatment.id WHERE treatment.doctor_account_id = ? AND treatment_status = ?";
+        Deque<Treatment> treatmentDeque = new LinkedList<>();
         try {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, account.getId());
             preparedStatement.setString(2, Status.treatment.name());
             resultSet = preparedStatement.executeQuery();
-            return treatmentMapper.AllTreatmentFromResultSet(resultSet);
-        }catch (SQLException e){
+            while (resultSet.next()) {
+                treatmentMapper.treatmentWithPatient(resultSet, treatmentDeque);
+                treatmentDeque.getFirst().getProceduresList().add(proceduresMapper.extractFromResultSet(resultSet));
+            }
+            return treatmentDeque;
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
-        }finally {
+        } finally {
             close(resultSet);
             close(preparedStatement);
             close();
@@ -207,18 +239,19 @@ public class JDBCTreatmentDAO implements TreatmentDAO {
     public boolean setDiagnosis(String diagnosis, Integer id) {
         PreparedStatement preparedStatement = null;
         String query = "UPDATE treatment SET diagnosis = ? WHERE id = ?";
-        try{
+        try {
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1,diagnosis);
-            preparedStatement.setInt(2,id);
+            preparedStatement.setString(1, diagnosis);
+            preparedStatement.setInt(2, id);
             preparedStatement.executeUpdate();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
             return false;
-        }finally {
+        } finally {
             close(preparedStatement);
             close();
-        }return true;
+        }
+        return true;
     }
 
     @Override
@@ -227,20 +260,27 @@ public class JDBCTreatmentDAO implements TreatmentDAO {
                 "LEFT JOIN procedures ON treatment.id = treatment_id WHERE patient_account_id = ? AND treatment_status = ?";
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
+        List<Procedures> proceduresList = new LinkedList<>();
+        Treatment treatment = new Treatment();
         try {
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1,id);
-            preparedStatement.setString(2,Status.treatment.name());
+            preparedStatement.setInt(1, id);
+            preparedStatement.setString(2, Status.treatment.name());
             resultSet = preparedStatement.executeQuery();
-            return treatmentMapper.extractFromResultSet(resultSet);
-        }catch (SQLException e){
+            while (resultSet.next()) {
+                treatment = treatmentMapper.extractFromResultSet(resultSet);
+                proceduresList.add(proceduresMapper.extractFromResultSet(resultSet));
+            }
+            treatment.setProceduresList(proceduresList);
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
             return null;
-        }finally {
+        } finally {
             close(resultSet);
             close(preparedStatement);
             close();
         }
+        return treatment;
     }
 
     @Override
@@ -253,8 +293,8 @@ public class JDBCTreatmentDAO implements TreatmentDAO {
             JDBCDoctorDAO jdbcDoctorDAO = new JDBCDoctorDAO(connection);
             JDBCPatientDAO jdbcPatientDAO = new JDBCPatientDAO(connection);
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1,Status.done.name());
-            preparedStatement.setInt(2,treatment.getId());
+            preparedStatement.setString(1, Status.done.name());
+            preparedStatement.setInt(2, treatment.getId());
             preparedStatement.executeUpdate();
             jdbcPatientDAO.removeDoctor(treatment.getPatient());
             jdbcDoctorDAO.changePatientNumber(treatment.getDoctor().getAccount().getId(), -1);
@@ -266,7 +306,8 @@ public class JDBCTreatmentDAO implements TreatmentDAO {
         } finally {
             close(preparedStatement);
             close();
-        } return true;
+        }
+        return true;
     }
 
     @Override
@@ -276,7 +317,7 @@ public class JDBCTreatmentDAO implements TreatmentDAO {
 
     @Override
     public boolean update(Treatment entity) {
-    return  true;
+        return true;
     }
 
     @Override

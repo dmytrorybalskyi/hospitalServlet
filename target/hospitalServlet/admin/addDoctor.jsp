@@ -42,14 +42,14 @@
 <div class="raw">
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand">Hospital</a>
+    <a class="navbar-brand"><fmt:message key="label.hospital"/></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link" aria-current="page" href="/">Main</a>
-        <a class="nav-link active" href="/addDoctor">Add Doctor</a>
+        <a class="nav-link" aria-current="page" href="/admin/admin"><fmt:message key="label.main"/></a>
+        <a class="nav-link active" href="/admin/addDoctor"><fmt:message key="label.addDoctor"/></a>
       </div>
       <div class="navbar-nav position-absolute top-0 end-0">
        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
@@ -73,25 +73,19 @@
 <div class="col-5">
 </div>
 <div class="col-2">
-<form action="/addDoctor" method="POST">
+<form action="/admin/addDoctor" method="POST">
     <fmt:message key="label.login"/> :<br/><input type="text" name="login"><br/>
-             <c:if test="${loginNotBlank==true}">
-                  <p></p>
-             </c:if>
-             <c:if test="${loginLength==true}">
-                  <p></p>
-             </c:if>
+    <c:if test="${loginInvalid==true}">
+        <p><fmt:message key="label.loginInvalid"/></p>
+    </c:if>
     <fmt:message key="label.password"/> :<br/><input type="password" name="password"><br/>
-             <c:if test="${passwordNotBlank==true}">
-                  <p></p>
-             </c:if>
+    <c:if test="${passwordInvalid==true}">
+        <p><fmt:message key="label.passwordInvalid"/></p>
+    </c:if>
     <fmt:message key="label.name"/> :<br/><input type="text" name="name"><br/>
-             <c:if test="${nameNotBlank==true}">
-                  <p></p>
-             </c:if>
-             <c:if test="${nameLength==true}">
-                  <p></p>
-             </c:if>
+    <c:if test="${nameInvalid==true}">
+        <p><fmt:message key="label.nameInvalid"/></p>
+    </c:if>
         <select class="selectpicker form-control form-select-button" name="category" required>
             <c:forEach items="${categories}" var="category">
                 <option value="${category.id}">${category.name}</option>

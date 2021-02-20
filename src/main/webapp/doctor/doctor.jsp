@@ -25,14 +25,14 @@
 <div class="container-fluid">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand">Hospital</a>
+            <a class="navbar-brand"> <fmt:message key="label.hospital"/></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-link active" aria-current="page" href="/doctor">Main</a>
-                    <a class="nav-link " aria-current="page" href="/procedure">Procedure</a>
+                    <a class="nav-link active" aria-current="page" href="/doctor/doctor"><fmt:message key="label.main"/></a>
+                    <a class="nav-link " aria-current="page" href="/doctor/procedure"><fmt:message key="label.procedures"/></a>
                 </div>
                 <div class="navbar-nav position-absolute top-0 end-0">
                     <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
@@ -46,7 +46,7 @@
                         </div>
                         <div class="btn-group me-2" role="group" aria-label="Second group">
                             <form action="/login" method="POST">
-                                <button type="submit" class="btn btn-secondary btn-sm">Sign out</button>
+                                <button type="submit" class="btn btn-secondary btn-sm"><fmt:message key="label.signOut"/></button>
                             </form>
                         </div>
                     </div>
@@ -59,13 +59,13 @@
             <div class="col-1">
             </div>
             <div class="col-6">
-                <h3>Your patients</h3>
+                <h3><fmt:message key="label.yourPatients"/></h3>
                 <c:forEach items="${treatments}" var="treatment">
                 <table class="table">
                     <thead>
                     <tr>
-                        <td><b>Patient</b></td>
-                        <td><b>Diagnosis</b></td>
+                        <td><b><fmt:message key="label.patient"/></b></td>
+                        <td><b><fmt:message key="label.diagnosis"/></b></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -76,19 +76,19 @@
                         <form action="/diagnosis" method="POST">
                             <td><input type="hidden" name="treatment_id" value="${treatment.id}"></td>
                             <td><input type="text" name="diagnosis" value=${treatment.diagnosis}></td>
-                            <td><button type="submit" class="btn btn-primary">edit</button></td>
+                            <td><button type="submit" class="btn btn-primary"><fmt:message key="label.edit"/></button></td>
                         </form>
-                        <td><a href="/addProcedure/${treatment.id}" class="btn btn-primary">add procedure</a></td>
+                        <td><a href="/doctor/addProcedure/${treatment.id}" class="btn btn-primary"><fmt:message key="label.addProcedure"/></a></td>
                         <form action="/discharge" method="POST">
                              <input type="hidden" name="treatment_id" value="${treatment.id}">
                              <input type="hidden" name="patient_id" value="${treatment.patient.account.id}">
-                            <td><button type="submit" class="btn btn-primary">discharge</button></td>
+                            <td><button type="submit" class="btn btn-primary"><fmt:message key="label.discharge"/></button></td>
                         </form>
                     </tr>
                     <tr>
-                        <td><b>Procedure name</b></td>
-                        <td><b>Type</b></td>
-                        <td><b>Status</b></td>
+                        <td><b><fmt:message key="label.procedureName"/></b></td>
+                        <td><b><fmt:message key="label.type"/></b></td>
+                        <td><b><fmt:message key="label.status"/></b></td>
                     </tr>
                     <c:forEach items="${treatment.proceduresList}" var="procedures">
                         <tr>

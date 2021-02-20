@@ -52,6 +52,31 @@ public class JDBCCategoryDAO implements CategoryDAO {
     }
 
     @Override
+    public List<Category> findAllWithoutNurse() {
+        List<Category> result = new LinkedList<>();
+        String query = "SELECT * FROM category WHERE name != ?";
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1,"nurse");
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Category category = new Category(resultSet.getInt(1));
+                category.setName(resultSet.getString(2));
+                result.add(category);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }finally {
+            close(resultSet);
+            close(preparedStatement);
+            close();
+        }
+        return result;
+    }
+
+    @Override
     public boolean update(Category entity) {
         return  true;
     }
@@ -84,4 +109,5 @@ public class JDBCCategoryDAO implements CategoryDAO {
             System.out.println(e.getMessage());
         }
     }
+
 }

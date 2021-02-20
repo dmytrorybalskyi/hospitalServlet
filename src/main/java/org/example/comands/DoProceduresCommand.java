@@ -15,9 +15,9 @@ public class DoProceduresCommand implements Command{
         Integer id = Integer.valueOf(request.getParameter("procedures_id"));
         proceduresService.doProcedures(id);
         if(account.getRole().equals(Roles.nurse)) {
-            return "redirect:nurse";
+            return "redirect:nurse/nurse";
         }
-        return "redirect:procedure";
+        return "redirect:doctor/procedure";
     }
 
 }

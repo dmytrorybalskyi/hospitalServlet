@@ -5,7 +5,6 @@ import org.example.service.AccountService;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 
-
 public class LoginCommand implements Command {
     private AccountService accountService = new AccountService();
 
@@ -33,7 +32,7 @@ public class LoginCommand implements Command {
         loggedUsers.add(account);
         request.getSession().setAttribute("account", account);
         request.getSession().getServletContext().setAttribute("loggedUsers", loggedUsers);
-        return "redirect:" + account.getRole().name();
+        return "redirect:" + account.getRole().name()+"/"+account.getRole().name();
     }
 
 }

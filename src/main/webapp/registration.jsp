@@ -56,9 +56,21 @@
 
 <form action="/registration" method="POST" commandName="patient">
     <fmt:message key="label.login"/> :<br/><input type="text" name="login"><br/>
+    <c:if test="${loginInvalid==true}">
+        <p><fmt:message key="label.loginInvalid"/></p>
+    </c:if>
     <fmt:message key="label.password"/> :<br/><input type="password" name="password"><br/>
+    <c:if test="${passwordInvalid==true}">
+        <p><fmt:message key="label.passwordInvalid"/></p>
+    </c:if>
     <fmt:message key="label.name"/> :<br/><input type="text" name="name"><br/>
+    <c:if test="${nameInvalid==true}">
+        <p><fmt:message key="label.nameInvalid"/></p>
+    </c:if>
     <fmt:message key="label.age"/> :<br/><input required type="number" name="age"><br/>
+    <c:if test="${ageInvalid==true}">
+        <p><fmt:message key="label.ageInvalid"/></p>
+    </c:if>
     <button type="submit"><fmt:message key="label.register"/> </button>
 </form>
 </body>

@@ -9,6 +9,9 @@ public class AppointmentCommand implements Command{
 
     @Override
     public String execute(HttpServletRequest request) {
+        if(null==request.getParameter("category")){
+            return "/patient/patient";
+        }
         Integer categoryId = Integer.valueOf(request.getParameter("category"));
         Account account = (Account) request.getSession().getAttribute("account");
         try {
@@ -16,9 +19,9 @@ public class AppointmentCommand implements Command{
         }catch (Exception e){
             System.out.println("Patient already appointment");
             request.setAttribute("message",true);
-            return "/patient";
+            return "/patient/patient";
         }
-        return "redirect:patient";
+        return "redirect:patient/patient";
     }
 
 }

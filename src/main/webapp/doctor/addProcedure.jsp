@@ -43,14 +43,14 @@
 <div class="raw">
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand">Hospital</a>
+    <a class="navbar-brand"><fmt:message key="label.hospital"/></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link" aria-current="page" href="/">Main</a>
-        <a class="nav-link" href="/procedure">Procedure</a>
+        <a class="nav-link" aria-current="page" href="/doctor/doctor"><fmt:message key="label.main"/></a>
+        <a class="nav-link" href="/doctor/procedure"><fmt:message key="label.procedures"/></a>
       </div>
       <div class="navbar-nav position-absolute top-0 end-0">
        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
@@ -74,8 +74,8 @@
 <div class="col-5">
 </div>
 <div class="col-2">
-<form action="/addProcedure/${id}" method="POST">
-    Name of Procedure: <br/><input type="text" name="procedureName"><br/>
+<form action="/doctor/addProcedure/${id}" method="POST">
+    <fmt:message key="label.nameOfProcedure"/>:<br/><input type="text" name="procedureName"><br/>
         <select class="selectpicker form-control form-select-button" name="type" required>
             <c:forEach items="${types}" var="type">
                 <option value="${type}">${type}</option>
@@ -86,7 +86,7 @@
                     <option value="${doctor.account.id}">${doctor.name}</option>
             </c:forEach>
         </select>
-    <button type="submit">add</button>
+    <button type="submit"> <fmt:message key="label.add"/></button>
     <p>${typeError}</p>
 </form>
 </div>

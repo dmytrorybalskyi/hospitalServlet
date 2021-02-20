@@ -52,14 +52,15 @@ public class JDBCProceduresDAO implements ProceduresDAO {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         List<Procedures> proceduresList = new LinkedList<>();
-        String query = "SELECT * FROM procedures WHERE doctor_account_id = ? AND procedure_status = ?";
+       // String query = "SELECT * FROM procedures WHERE doctor_account_id = ? AND procedure_status = ?";
+        String query = "SELECT * FROM procedures LEFT JOIN treatment ON treatment_id = treatment.id LEFT JOIN patient ON treatment.patient_account_id = patient.account_id WHERE procedures.doctor_account_id = ? AND procedure_status = ?";
         try {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1,id);
             preparedStatement.setString(2, Status.treatment.name());
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){
-                proceduresList.add(proceduresMapper.extractFromResultSet(resultSet));
+                proceduresList.add(proceduresMapper.extractFromResultSetWihPatient(resultSet));
             }
         }catch (SQLException e){
             System.out.println(e.getMessage());

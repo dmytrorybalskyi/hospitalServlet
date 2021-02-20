@@ -6,15 +6,10 @@ import org.example.model.dao.TreatmentDAO;
 import org.example.model.dao.jdbs.JDBCTreatmentDAO;
 import org.example.model.entity.*;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.Deque;
 
 public class TreatmentService {
     private DAOFactory daoFactory = DAOFactory.getInstance();
-
-    public List<Treatment> getTreatmentByStatus() {
-        JDBCTreatmentDAO jdbcTreatmentDAO = new JDBCTreatmentDAO(ConnectionPoolHolder.getConnection());
-        return jdbcTreatmentDAO.findByStatus();
-    }
 
     public boolean setDoctor(Treatment treatment, Integer doctorId) {
         JDBCTreatmentDAO jdbcTreatmentDAO = new JDBCTreatmentDAO(ConnectionPoolHolder.getConnection());
@@ -22,6 +17,12 @@ public class TreatmentService {
         jdbcTreatmentDAO.setDoctor(treatment, doctorId);
         return true;
     }
+
+    public Page getPageByStatus(Page page){
+        JDBCTreatmentDAO jdbcTreatmentDAO =  new JDBCTreatmentDAO(ConnectionPoolHolder.getConnection());
+        return jdbcTreatmentDAO.pageByStatus(page);
+        }
+
 
     public Category getCategoryById(Integer treatmentId) {
         JDBCTreatmentDAO jdbcTreatmentDAO = new JDBCTreatmentDAO(ConnectionPoolHolder.getConnection());
@@ -38,7 +39,7 @@ public class TreatmentService {
         return treatmentDAO.create(new Treatment(new Patient(account),new Category(categoryId),Status.registration));
     }
 
-    public List<Treatment> getAllByDoctorAndStatus(Account account){
+    public Deque<Treatment> getAllByDoctorAndStatus(Account account){
         TreatmentDAO treatmentDAO = daoFactory.createTreatmentDAO();
         return treatmentDAO.getAllByDoctorAndStatus(account);
     }

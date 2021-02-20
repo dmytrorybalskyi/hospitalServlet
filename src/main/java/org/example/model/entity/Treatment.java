@@ -82,6 +82,8 @@ public class Treatment {
         this.doctor = doctor;
     }
 
+
+
     @Override
     public String toString() {
         return "Treatment{" +

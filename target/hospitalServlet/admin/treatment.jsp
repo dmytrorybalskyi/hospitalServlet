@@ -43,14 +43,14 @@
 <div class="raw">
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand">Hospital</a>
+    <a class="navbar-brand"><fmt:message key="label.hospital"/></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link" aria-current="page" href="/">Main</a>
-        <a class="nav-link" href="/addDoctor">Add Doctor</a>
+        <a class="nav-link" aria-current="page" href="/admin/admin"><fmt:message key="label.main"/></a>
+        <a class="nav-link" href="/admin/addDoctor"><fmt:message key="label.addDoctor"/></a>
       </div>
       <div class="navbar-nav position-absolute top-0 end-0">
        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
@@ -74,7 +74,7 @@
 <div class="col-2">
 </div>
 <div class="col-2">
-         <form action="/treatment/${treatment.id}" method="POST">
+         <form action="/admin/treatment/${treatment.id}" method="POST">
 
                <input class="form-control" type="text" placeholder="${treatment.patient.name}" aria-label="Disabled input example" disabled readonly>
 
@@ -84,7 +84,7 @@
                                      <option value="${doctor.account.id}">${doctor.name}</option>
                                  </c:forEach>
                        </select>
-                 <button type="submit" class="btn btn-outline-dark">Set</button>
+                 <button type="submit" class="btn btn-outline-dark"><fmt:message key="label.set"/></button>
          </form>
           <p>${doctor}</p>
      </table>

@@ -15,13 +15,23 @@ public class DoctorRegistrationCommand implements Command{
         String password = request.getParameter("password");
         String name = request.getParameter("name");
 
-        if(login==null||login.equals("")||password==null||password.equals("")||name==null||name.equals("")){
+        if(request.getParameter("category")==null){
+            return "/admin/addDoctor.jsp";
+        }
+        if(login==null||!login.matches("[a-zA-ZА-Яа-я0-9!<>_-]{1,20}")){
+            request.setAttribute("loginInvalid",true);
+            return "/admin/addDoctor.jsp";
+        }else if(password==null||!password.matches("[a-zA-ZА-Яа-я0-9!<>_-]{1,20}")){
+            request.setAttribute("passwordInvalid",true);
+            return"/admin/addDoctor.jsp";
+        }else if(name==null||!name.matches("([А-ЯA-ZЁ][a-zа-яьё'ъ]{2,16}\\s[А-ЯA-ZЁ][a-zа-яьё'ъ]{2,16})")){
+            request.setAttribute("nameInvalid",true);
             return "/admin/addDoctor.jsp";
         }
         Integer categoryId = Integer.valueOf(request.getParameter("category"));
         try {
             doctorService.addDoctor(login,password,name,categoryId);
-            return "/admin";
+            return "redirect:admin/admin";
         }catch (Exception e){
             System.out.println(e.getMessage());
             return "/admin/addDoctor.jsp";

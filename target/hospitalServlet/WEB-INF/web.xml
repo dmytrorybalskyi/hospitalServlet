@@ -31,12 +31,44 @@
 
     <filter-mapping>
         <filter-name>IdFilter</filter-name>
-        <url-pattern>/treatment/*</url-pattern>
+        <url-pattern>/admin/treatment/*</url-pattern>
     </filter-mapping>
 
     <filter-mapping>
         <filter-name>IdFilter</filter-name>
-        <url-pattern>/addProcedure/*</url-pattern>
+        <url-pattern>/doctor/addProcedure/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>PageFiler</filter-name>
+        <filter-class>org.example.filters.PageFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>PageFiler</filter-name>
+        <url-pattern>/admin/admin/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>AuthenticationFilter</filter-name>
+        <filter-class>org.example.filters.AuthenticationFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/admin/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/doctor/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/patient/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/nurse/*</url-pattern>
     </filter-mapping>
 
     <filter>

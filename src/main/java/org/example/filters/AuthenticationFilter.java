@@ -1,11 +1,13 @@
 package org.example.filters;
 
+import org.example.model.entity.Account;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class LocalFilter implements Filter {
+public class AuthenticationFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -15,12 +17,14 @@ public class LocalFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
-        String language = req.getParameter("lang");
-        if(language==null){
-            req.getSession().setAttribute("lang","en");
+        String path = req.getRequestURI().replaceFirst("/","").replaceAll("/.*", "");
+        Account account = (Account) req.getSession().getAttribute("account");
+        if (account == null || !path.equals(account.getRole().name())) {
+            RequestDispatcher rd = req.getRequestDispatcher("/");
+            rd.forward(req,resp);
         }
-        req.getSession().setAttribute("lang",language);
-        filterChain.doFilter(req,resp);
+        filterChain.doFilter(req, resp);
+
     }
 
     @Override

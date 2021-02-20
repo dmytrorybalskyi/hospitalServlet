@@ -27,13 +27,13 @@
     <div class="col">
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-          <a class="navbar-brand">Hospital</a>
+          <a class="navbar-brand"><fmt:message key="label.hospital"/></a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-              <a class="nav-link active" aria-current="page" href="/patient">Main</a>
+              <a class="nav-link active" aria-current="page" href="/patient/patient"><fmt:message key="label.main"/></a>
             </div>
             <div class="navbar-nav position-absolute top-0 end-0">
              <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
@@ -47,7 +47,7 @@
               </div>
              <div class="btn-group me-2" role="group" aria-label="Second group">
                  <form action="/login" method="POST">
-                       <button type="submit" class="btn btn-secondary btn-sm">sign out</button>
+                       <button type="submit" class="btn btn-secondary btn-sm"><fmt:message key="label.signOut"/></button>
                  </form>
              </div>
            </div>
@@ -61,18 +61,18 @@
     <div class="container-fluid">
     <div class="row">
     <div class="col-4">
-           <form action="/appointment" method="POST" class="form-horizontal">
+           <form action="/patient/appointment" method="POST" class="form-horizontal">
               <select class="form-select form-select-sm" aria-label=".form-select-sm example" name="category" required>
                        <c:forEach items="${categories}" var="category">
                            <option name="category_id" value="${category.id}">${category.name}</option>
                        </c:forEach>
                    </select>
                     <c:if test="${message==true}">
-                        <p>already appointment</p>
+                        <p><fmt:message key="label.alreadyAppointment"/></p>
                     </c:if>
      </div>
      <div class="col-8">
-                   <button type="submit">make appointment</button>
+                   <button type="submit"><fmt:message key="label.makeAppointment"/></button>
 
            </form>
           </div>
@@ -80,24 +80,24 @@
           <div class="row">
           <div class="col">
             <c:if test="${treatment.proceduresList.isEmpty()==false}">
-            <h3>Treatment:</h3>
-                <p><b>Category:</b> ${treatment.doctor.category.name}</p>
-                <p><b>Doctor:</b> ${treatment.doctor.name}</p>
-                <p><b>Diagnosis:</b> ${treatment.diagnosis}</p>
+            <h3><fmt:message key="label.treatment"/>:</h3>
+                <p><b><fmt:message key="label.category"/>:</b> ${treatment.doctor.category.name}</p>
+                <p><b><fmt:message key="label.doctor"/>:</b> ${treatment.doctor.name}</p>
+                <p><b><fmt:message key="label.diagnosis"/>:</b> ${treatment.diagnosis}</p>
             </c:if>
           </div>
           </div>
           </div>
     </div>
     <div class="col-6">
-        <h3>Your procedures:</h3>
+        <h3><fmt:message key="label.yourProcedures"/>:</h3>
           <c:forEach items="${treatment.proceduresList}" var="procedures">
                          <table class="table">
                               <thead>
                               <tr>
-                                  <td><b>Name</b></td>
-                                  <td><b>type</b></td>
-                                  <td><b>Status</b></td>
+                                  <td><b><fmt:message key="label.nameOfProcedure"/></b></td>
+                                  <td><b><fmt:message key="label.type"/></b></td>
+                                  <td><b><fmt:message key="label.status"/></b></td>
                               </tr>
                               </thead>
                                 <form action="doProcedures" method="POST">

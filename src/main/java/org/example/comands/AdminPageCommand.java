@@ -1,6 +1,7 @@
 package org.example.comands;
 
 import org.example.model.entity.Account;
+import org.example.model.entity.Page;
 import org.example.service.TreatmentService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,14 +11,11 @@ public class AdminPageCommand implements Command{
 
     @Override
     public String execute(HttpServletRequest request) {
-        request.setAttribute("treatments",treatmentService.getTreatmentByStatus());
-        Account account = (Account) request.getSession().getAttribute("account");
-        if(account.getLogin()==null){
-            return "redirect:/";
-        }
-        if(account.getRole().name().equals("admin")){
-            return "/admin/admin.jsp";
-        }else return "redirect:/";
+        Page page = treatmentService.getPageByStatus(new Page((Integer) request.getSession().getAttribute("page")));
+        request.setAttribute("treatments",page.getList());
+        request.setAttribute("pages",page.getTotalPages());
+        return "/admin/admin.jsp";
+
     }
 }
 
