@@ -81,7 +81,7 @@
                         <td><a href="/doctor/addProcedure/${treatment.id}" class="btn btn-primary"><fmt:message key="label.addProcedure"/></a></td>
                         <form action="/discharge" method="POST">
                              <input type="hidden" name="treatment_id" value="${treatment.id}">
-                             <input type="hidden" name="patient_id" value="${treatment.patient.account.id}">
+                             <input type="hidden" name="patient_id" value="${treatment.patient.id}">
                             <td><button type="submit" class="btn btn-primary"><fmt:message key="label.discharge"/></button></td>
                         </form>
                     </tr>

@@ -29,7 +29,7 @@ public class TreatmentMapper implements ObjectMapper<Treatment> {
             treatment.setDiagnosis(rs.getString("diagnosis"));
             treatment.setPatient(new Patient(rs.getString("name"),
                     rs.getInt("age"),
-                    new Account(rs.getInt("account_id"))));
+                    rs.getInt("account_id")));
             deque.addFirst(treatment);
         }
         return deque;

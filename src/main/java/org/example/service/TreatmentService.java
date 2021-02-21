@@ -13,7 +13,7 @@ public class TreatmentService {
 
     public boolean setDoctor(Treatment treatment, Integer doctorId) {
         JDBCTreatmentDAO jdbcTreatmentDAO = new JDBCTreatmentDAO(ConnectionPoolHolder.getConnection());
-        treatment.getPatient().setDoctor(new Doctor(new Account(doctorId)));
+        treatment.getPatient().setDoctor(new Doctor(doctorId));
         jdbcTreatmentDAO.setDoctor(treatment, doctorId);
         return true;
     }
@@ -24,10 +24,10 @@ public class TreatmentService {
         }
 
 
-    public Category getCategoryById(Integer treatmentId) {
-        JDBCTreatmentDAO jdbcTreatmentDAO = new JDBCTreatmentDAO(ConnectionPoolHolder.getConnection());
-        return jdbcTreatmentDAO.getCategoryById(treatmentId);
-    }
+   // public Category getCategoryById(Integer treatmentId) {
+   //     JDBCTreatmentDAO jdbcTreatmentDAO = new JDBCTreatmentDAO(ConnectionPoolHolder.getConnection());
+  //      return jdbcTreatmentDAO.getCategoryById(treatmentId);
+   // }
 
     public Treatment findById(Integer id) {
         TreatmentDAO treatmentDAO = daoFactory.createTreatmentDAO();
@@ -36,7 +36,7 @@ public class TreatmentService {
 
     public Treatment createTreatment(Account account, Integer categoryId) throws SQLException {
         TreatmentDAO treatmentDAO = daoFactory.createTreatmentDAO();
-        return treatmentDAO.create(new Treatment(new Patient(account),new Category(categoryId),Status.registration));
+        return treatmentDAO.create(new Treatment(new Patient(account.getId()),new Category(categoryId),Status.registration));
     }
 
     public Deque<Treatment> getAllByDoctorAndStatus(Account account){
@@ -51,8 +51,8 @@ public class TreatmentService {
 
     public boolean discharge(Integer doctorId,Integer patientId,Integer treatmentId) throws SQLException {
         Treatment treatment = new Treatment(treatmentId);
-        treatment.setDoctor(new Doctor( new Account(doctorId)));
-        treatment.setPatient(new Patient( new Account(patientId)));
+        treatment.setDoctor(new Doctor(doctorId));
+        treatment.setPatient(new Patient(patientId));
         TreatmentDAO treatmentDAO = daoFactory.createTreatmentDAO();
         return treatmentDAO.discharge(treatment);
     }

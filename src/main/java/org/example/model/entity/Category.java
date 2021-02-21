@@ -1,6 +1,6 @@
 package org.example.model.entity;
 
-public class Category {
+public class Category{
 
     private Integer id;
 
@@ -31,6 +31,20 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if(o==this){
+            return true;
+        }
+        if(o==null||o.getClass()!=this.getClass()){
+            return false;
+        }
+
+        Category category = (Category) o;
+        return id==category.getId()
+                &&(name==category.getName()||name!=null&&name.equals(((Category) o).getName()));
     }
 
 }

@@ -58,8 +58,8 @@ public class JDBCPatientDAO implements PatientDAO {
         PreparedStatement preparedStatement = null;
         try{
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1,patient.getDoctor().getAccount().getId());
-            preparedStatement.setInt(2,patient.getAccount().getId());
+            preparedStatement.setInt(1,patient.getDoctor().getId());
+            preparedStatement.setInt(2,patient.getId());
             preparedStatement.executeUpdate();
         }catch (SQLException e){
             System.out.println(e.getMessage());
@@ -74,7 +74,7 @@ public class JDBCPatientDAO implements PatientDAO {
         PreparedStatement preparedStatement = null;
         try{
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1,patient.getAccount().getId());
+            preparedStatement.setInt(1,patient.getId());
             preparedStatement.executeUpdate();
         }catch (SQLException e){
             System.out.println(e.getMessage());

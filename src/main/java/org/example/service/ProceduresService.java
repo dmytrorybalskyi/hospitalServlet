@@ -14,7 +14,7 @@ public class ProceduresService {
     public Procedures addProcedures(String procedureName,Integer doctor_id,
                                     Integer treatment_id,String type) throws SQLException {
         Procedures procedures = new Procedures(procedureName);
-        procedures.setDoctor(new Doctor(new Account(doctor_id)));
+        procedures.setDoctor(new Doctor(doctor_id));
         procedures.setTreatment(new Treatment(treatment_id));
         procedures.setStatus(Status.treatment);
         procedures.setType(Types.valueOf(type));

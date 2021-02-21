@@ -6,10 +6,7 @@ import org.example.model.mapper.PatientMapper;
 import org.example.model.mapper.ProceduresMapper;
 import org.example.model.mapper.TreatmentMapper;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,25 +26,29 @@ public class JDBCTreatmentDAO implements TreatmentDAO {
     public Treatment create(Treatment treatment) throws SQLException {
         PreparedStatement preparedStatement = null;
         String query = "INSERT INTO treatment (patient_account_id, category_id, treatment_status) VALUES(?,?,?)";
+        ResultSet resultSet = null;
         try {
             connection.setAutoCommit(false);
             connection.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
-            if (!isAppointment(treatment.getPatient().getAccount().getId())) {
+            if (!isAppointment(treatment.getPatient().getId())) {
                 close();
                 throw new SQLException("you already appointment");
             }
-            preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1, treatment.getPatient().getAccount().getId());
+            preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setInt(1, treatment.getPatient().getId());
             preparedStatement.setInt(2, treatment.getCategory().getId());
             preparedStatement.setString(3, treatment.getStatus().name());
             preparedStatement.executeUpdate();
+            resultSet = preparedStatement.getGeneratedKeys();
+            if(resultSet.next()){
+                treatment.setId(resultSet.getInt(1));
+            }
             connection.commit();
             return treatment;
         } catch (SQLException e) {
-            assert connection != null;
-            connection.rollback();
             throw new SQLException(e.getMessage());
         } finally {
+            close(resultSet);
             close(preparedStatement);
             close();
         }
@@ -171,8 +172,9 @@ public class JDBCTreatmentDAO implements TreatmentDAO {
             rs = preparedStatement.executeQuery();
             if (rs.next()) {
                 treatment.setId(rs.getInt(1));
+                treatment.setDiagnosis(rs.getString("diagnosis"));
                 treatment.setCategory(new Category(rs.getInt(11), rs.getString(12)));
-                treatment.setPatient(new Patient(rs.getString(8), rs.getInt(9), new Account(rs.getInt(7))));
+                treatment.setPatient(new Patient(rs.getString(8), rs.getInt(9), rs.getInt(7)));
                 treatment.setStatus(Status.valueOf(rs.getString(6)));
             }
             return treatment;
@@ -297,7 +299,7 @@ public class JDBCTreatmentDAO implements TreatmentDAO {
             preparedStatement.setInt(2, treatment.getId());
             preparedStatement.executeUpdate();
             jdbcPatientDAO.removeDoctor(treatment.getPatient());
-            jdbcDoctorDAO.changePatientNumber(treatment.getDoctor().getAccount().getId(), -1);
+            jdbcDoctorDAO.changePatientNumber(treatment.getDoctor().getId(), -1);
             connection.commit();
         } catch (SQLException e) {
             assert connection != null;
@@ -333,7 +335,9 @@ public class JDBCTreatmentDAO implements TreatmentDAO {
     @Override
     public void close(ResultSet resultSet) {
         try {
-            resultSet.close();
+            if(resultSet!=null) {
+                resultSet.close();
+            }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -342,7 +346,9 @@ public class JDBCTreatmentDAO implements TreatmentDAO {
     @Override
     public void close(PreparedStatement preparedStatement) {
         try {
-            preparedStatement.close();
+            if(preparedStatement!=null) {
+                preparedStatement.close();
+            }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

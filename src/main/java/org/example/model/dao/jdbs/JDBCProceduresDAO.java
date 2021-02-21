@@ -6,10 +6,7 @@ import org.example.model.entity.Procedures;
 import org.example.model.entity.Status;
 import org.example.model.mapper.ProceduresMapper;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,19 +22,24 @@ public class JDBCProceduresDAO implements ProceduresDAO {
     public Procedures create(Procedures procedures) throws SQLException {
         PreparedStatement preparedStatement = null;
         String query = "INSERT INTO procedures (name,treatment_id,doctor_account_id,type,procedure_status) VALUES(?,?,?,?,?)";
+        ResultSet resultSet = null;
         try {
             JDBCDoctorDAO jdbcDoctorDAO = new JDBCDoctorDAO(connection);
-            Doctor doctor = jdbcDoctorDAO.finById(procedures.getDoctor().getAccount().getId());
+            Doctor doctor = jdbcDoctorDAO.finById(procedures.getDoctor().getId());
             if(doctor.getCategory().getId()==5&&procedures.getType().name().equals("operation")){
                 throw new SQLException("Nurse cannot do operation");
             }
-            preparedStatement = connection.prepareStatement(query);
+            preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1,procedures.getName());
             preparedStatement.setInt(2,procedures.getTreatment().getId());
-            preparedStatement.setInt(3,procedures.getDoctor().getAccount().getId());
+            preparedStatement.setInt(3,procedures.getDoctor().getId());
             preparedStatement.setString(4,procedures.getType().name());
             preparedStatement.setString(5,procedures.getStatus().name());
             preparedStatement.executeUpdate();
+            resultSet = preparedStatement.getGeneratedKeys();
+            if(resultSet.next()){
+                procedures.setId(resultSet.getInt(1));
+            }
             return procedures;
         }catch (SQLException e){
             throw  new SQLException(e);

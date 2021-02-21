@@ -3,6 +3,7 @@ package org.example.model.entity;
 import java.util.List;
 
 public class Patient {
+    private Integer id;
     private Account account;
     private String name;
     private int age;
@@ -10,8 +11,8 @@ public class Patient {
     private List<Procedures> proceduresList;
     private List<Treatment> treatmentList;
 
-    public Patient(Account account) {
-        this.account = account;
+    public Patient(Integer id) {
+        this.id = id;
     }
 
     public Patient(String name, int age) {
@@ -19,10 +20,10 @@ public class Patient {
         this.age = age;
     }
 
-    public Patient(String name, int age, Account account) {
+    public Patient(String name, int age, Integer id) {
         this.name = name;
         this.age = age;
-        this.account = account;
+        this.id = id;
     }
 
     public Account getAccount() {
@@ -71,5 +72,13 @@ public class Patient {
 
     public void setTreatmentList(List<Treatment> treatmentList) {
         this.treatmentList = treatmentList;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }
