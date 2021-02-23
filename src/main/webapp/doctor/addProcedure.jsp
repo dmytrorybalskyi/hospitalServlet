@@ -6,7 +6,7 @@
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="messages.messages"/>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
+<html lang="${sessionScope.lang}">
 <head>
     <title>Add Procedure</title>
     <meta charset="UTF-8">

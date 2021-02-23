@@ -17,11 +17,11 @@ public class AuthenticationFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
-        String path = req.getRequestURI().replaceFirst("/","").replaceAll("/.*", "");
+        String path = req.getRequestURI().replaceFirst("/", "").replaceAll("/.*", "");
         Account account = (Account) req.getSession().getAttribute("account");
         if (account == null || !path.equals(account.getRole().name())) {
             RequestDispatcher rd = req.getRequestDispatcher("/");
-            rd.forward(req,resp);
+            rd.forward(req, resp);
         }
         filterChain.doFilter(req, resp);
 

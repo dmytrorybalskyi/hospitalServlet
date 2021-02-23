@@ -47,7 +47,7 @@ public class ProceduresServiceTest {
         assertEquals("treatment", procedures.getStatus().name());
     }
 
-    @Test(expected = SQLException.class)
+    @Test(expected = NullPointerException.class)
     public void addProceduresByNurseAndOperation() throws SQLException {
         proceduresService.addProcedures("testProcedure", nurseID, treatmentID, "operation");
     }

@@ -8,17 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
 import java.util.*;
-//TODO: VALIDATION --> X
-//TODO: LOCALIZATION --> X
-//TODO: GET PATIENT NAME FROM PROCEDURES QUERY --> X
-//TODO: REFACTOR ACCOUNT FIELD IN PATIENT AND DOCTOR --> X
-//TODO: AUTHENTICATION FILTER --> X
-//TODO: REFACTOR RESULT SET WITH MAPPER -->
-//TODO: TESTS -->
-//TODO: BUILDER-? -->
-//TODO: SET DOCTOR CHECKING -->
+
 public class MainServlet extends HttpServlet {
     private Map<String, Command> commands = new HashMap<>();
 
@@ -64,7 +55,6 @@ public class MainServlet extends HttpServlet {
                 (r) -> "/index.jsp");
         System.out.println(command.getClass().getName());
         String page = command.execute(request);
-        //request.getRequestDispatcher(page).forward(request,response);
         if (page.contains("redirect:")) {
             response.sendRedirect(page.replace("redirect:", "/"));
         } else {

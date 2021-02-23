@@ -30,7 +30,7 @@ public class AccountServiceTest {
         assertEquals(expected, actual);
     }
 
-    @Test(expected = AssertionError.class)
+    @Test(expected = NullPointerException.class)
     public void findByLoginWrongLogin() {
         String expected = "admin100500";
         String actual = accountService.findByLogin(expected).getLogin();

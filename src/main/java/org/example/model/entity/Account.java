@@ -7,15 +7,16 @@ public class Account {
     private Roles role;
     private Patient patient;
 
-    public Account(){}
-
-    public Account(int id){
-        this.id=id;
+    public Account() {
     }
 
-    public Account(String login,String password){
-        this.login=login;
-        this.password=password;
+    public Account(int id) {
+        this.id = id;
+    }
+
+    public Account(String login, String password) {
+        this.login = login;
+        this.password = password;
     }
 
     public int getId() {

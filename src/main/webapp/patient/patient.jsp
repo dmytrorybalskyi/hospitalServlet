@@ -6,7 +6,7 @@
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="messages.messages"/>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
+<html lang="${sessionScope.lang}">
 <head>
     <meta charset="UTF-8">
     <title>Main</title>
@@ -107,8 +107,8 @@
                                  <td>${procedures.status}</td>
                                  </tr>
                                  </form>
-                         </table>
                 </c:forEach>
+                         </table>
     </div>
     <div class="col-3">
     </div>

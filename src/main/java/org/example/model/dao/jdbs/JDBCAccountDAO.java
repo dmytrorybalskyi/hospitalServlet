@@ -4,6 +4,7 @@ import org.example.model.dao.AccountDAO;
 import org.example.model.dao.ConnectionPoolHolder;
 import org.example.model.entity.Account;
 import org.example.model.entity.Roles;
+import org.example.model.mapper.AccountMapper;
 
 import java.sql.*;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.Optional;
 
 public class JDBCAccountDAO implements AccountDAO {
     private Connection connection;
+    private AccountMapper accountMapper = new AccountMapper();
 
     public JDBCAccountDAO(Connection connection) {
         this.connection = connection;
@@ -24,19 +26,20 @@ public class JDBCAccountDAO implements AccountDAO {
         String query = "INSERT INTO account (login, password, role) VALUES(?,?,?)";
         try {
             preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1,account.getLogin());
-            preparedStatement.setString(2,account.getPassword());
-            preparedStatement.setString(3,account.getRole().name());
+            preparedStatement.setString(1, account.getLogin());
+            preparedStatement.setString(2, account.getPassword());
+            preparedStatement.setString(3, account.getRole().name());
             preparedStatement.executeUpdate();
-            resultSet = preparedStatement.getGeneratedKeys();;
-            if(resultSet.next()){
+            resultSet = preparedStatement.getGeneratedKeys();
+            ;
+            if (resultSet.next()) {
                 account.setId(resultSet.getInt(1));
             }
             return account;
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
             return null;
-        }finally {
+        } finally {
             close(preparedStatement);
             close(resultSet);
         }
@@ -46,23 +49,20 @@ public class JDBCAccountDAO implements AccountDAO {
     @Override
     public Account findByLogin(String login) {
         String query = "SELECT * FROM account WHERE login = (?)";
-        Account account = new Account();
+        Account account = null;
         PreparedStatement preparedStatement = null;
         ResultSet rs = null;
         try {
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1,login);
+            preparedStatement.setString(1, login);
             rs = preparedStatement.executeQuery();
-            if(rs.next()){
-                account.setId(rs.getInt("id"));
-                account.setLogin(rs.getString("login"));
-                account.setPassword(rs.getString("password"));
-                account.setRole(Roles.valueOf(rs.getString("role")));
+            if (rs.next()) {
+                account = accountMapper.extractFromResultSet(rs);
             }
-            return  account;
-        }catch (SQLException e){
+            return account;
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
-        }finally {
+        } finally {
             close(rs);
             close(preparedStatement);
             close();
@@ -73,23 +73,20 @@ public class JDBCAccountDAO implements AccountDAO {
     @Override
     public Account finById(int id) {
         String query = "SELECT * FROM account WHERE id = ?";
-        Account account = new Account();
+        Account account = null;
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1,""+id);
+            preparedStatement.setString(1, "" + id);
             rs = preparedStatement.executeQuery();
-            while (rs.next()){
-                account.setId(rs.getInt("id"));
-                account.setLogin(rs.getString("login"));
-                account.setPassword(rs.getString("password"));
-                account.setRole(Roles.valueOf(rs.getString("role")));
+            while (rs.next()) {
+                account = accountMapper.extractFromResultSet(rs);
             }
             return account;
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
-        }finally {
+        } finally {
             close(rs);
             close(preparedStatement);
         }
@@ -103,15 +100,15 @@ public class JDBCAccountDAO implements AccountDAO {
 
     @Override
     public boolean update(Account entity) {
-        return  true;
+        return true;
     }
 
     @Override
     public void close(ResultSet resultSet) {
         try {
-            if(resultSet!=null)
-            resultSet.close();
-        }catch (SQLException e){
+            if (resultSet != null)
+                resultSet.close();
+        } catch (SQLException e) {
             System.out.println(e.getErrorCode());
         }
     }
@@ -119,19 +116,19 @@ public class JDBCAccountDAO implements AccountDAO {
     @Override
     public void close(PreparedStatement preparedStatement) {
         try {
-            if(preparedStatement!=null)
-            preparedStatement.close();
-        }catch (SQLException e){
+            if (preparedStatement != null)
+                preparedStatement.close();
+        } catch (SQLException e) {
             System.out.println(e.getErrorCode());
         }
     }
 
     @Override
-    public void close(){
+    public void close() {
         try {
-            if(connection!=null)
+            if (connection != null)
                 connection.close();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getErrorCode());
         }
     }

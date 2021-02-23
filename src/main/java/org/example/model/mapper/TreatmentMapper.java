@@ -35,4 +35,13 @@ public class TreatmentMapper implements ObjectMapper<Treatment> {
         return deque;
     }
 
+    public Treatment treatmentById(ResultSet rs)throws SQLException{
+        Treatment treatment = new Treatment(rs.getInt("treatment.id"));
+        treatment.setDiagnosis(rs.getString("diagnosis"));
+        treatment.setCategory(new Category(rs.getInt("category.id"), rs.getString("category.name")));
+        treatment.setPatient(new Patient(rs.getString("patient.name"), rs.getInt("patient.age"), rs.getInt("patient.account_id")));
+        treatment.setStatus(Status.valueOf(rs.getString("treatment_status")));
+        return treatment;
+    }
+
 }

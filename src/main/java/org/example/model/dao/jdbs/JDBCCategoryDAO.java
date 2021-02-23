@@ -3,6 +3,7 @@ package org.example.model.dao.jdbs;
 
 import org.example.model.dao.CategoryDAO;
 import org.example.model.entity.Category;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,17 +34,17 @@ public class JDBCCategoryDAO implements CategoryDAO {
         String query = "SELECT * FROM category";
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        try{
+        try {
             preparedStatement = connection.prepareStatement(query);
             resultSet = preparedStatement.executeQuery();
-                while (resultSet.next()) {
-                    Category category = new Category(resultSet.getInt(1));
-                    category.setName(resultSet.getString(2));
-                    result.add(category);
-                }
+            while (resultSet.next()) {
+                Category category = new Category(resultSet.getInt("id"),
+                        resultSet.getString("name"));
+                result.add(category);
+            }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-        }finally {
+        } finally {
             close(resultSet);
             close(preparedStatement);
             close();
@@ -57,18 +58,18 @@ public class JDBCCategoryDAO implements CategoryDAO {
         String query = "SELECT * FROM category WHERE name != ?";
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        try{
+        try {
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1,"nurse");
+            preparedStatement.setString(1, "nurse");
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Category category = new Category(resultSet.getInt(1));
-                category.setName(resultSet.getString(2));
+                Category category = new Category(resultSet.getInt("id"),
+                        resultSet.getString("name"));
                 result.add(category);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-        }finally {
+        } finally {
             close(resultSet);
             close(preparedStatement);
             close();
@@ -78,7 +79,7 @@ public class JDBCCategoryDAO implements CategoryDAO {
 
     @Override
     public boolean update(Category entity) {
-        return  true;
+        return true;
     }
 
 

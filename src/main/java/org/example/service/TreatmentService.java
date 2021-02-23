@@ -11,7 +11,7 @@ import java.util.Deque;
 public class TreatmentService {
     private DAOFactory daoFactory = DAOFactory.getInstance();
 
-    public boolean setDoctor(Treatment treatment, Integer doctorId) {
+    public boolean setDoctor(Treatment treatment, Integer doctorId) throws SQLException {
         JDBCTreatmentDAO jdbcTreatmentDAO = new JDBCTreatmentDAO(ConnectionPoolHolder.getConnection());
         treatment.getPatient().setDoctor(new Doctor(doctorId));
         jdbcTreatmentDAO.setDoctor(treatment, doctorId);
@@ -22,12 +22,6 @@ public class TreatmentService {
         JDBCTreatmentDAO jdbcTreatmentDAO =  new JDBCTreatmentDAO(ConnectionPoolHolder.getConnection());
         return jdbcTreatmentDAO.pageByStatus(page);
         }
-
-
-   // public Category getCategoryById(Integer treatmentId) {
-   //     JDBCTreatmentDAO jdbcTreatmentDAO = new JDBCTreatmentDAO(ConnectionPoolHolder.getConnection());
-  //      return jdbcTreatmentDAO.getCategoryById(treatmentId);
-   // }
 
     public Treatment findById(Integer id) {
         TreatmentDAO treatmentDAO = daoFactory.createTreatmentDAO();

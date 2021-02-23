@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class AddProcedureCommand implements Command{
+public class AddProcedureCommand implements Command {
     DoctorService doctorService = new DoctorService();
     TreatmentService treatmentService = new TreatmentService();
     ProceduresService proceduresService = new ProceduresService();
@@ -22,17 +22,17 @@ public class AddProcedureCommand implements Command{
     public String execute(HttpServletRequest request) {
         Integer id = (Integer) request.getSession().getAttribute("id");
         Treatment treatment = treatmentService.findById(id);
-        request.setAttribute("types",new ArrayList(Arrays.asList(Types.values())));
-        request.setAttribute("doctors",doctorService.getAllByCategoryAndNurse(treatment.getCategory().getId()));
+        request.setAttribute("types", new ArrayList(Arrays.asList(Types.values())));
+        request.setAttribute("doctors", doctorService.getAllByCategoryAndNurse(treatment.getCategory().getId()));
         String procedureName = request.getParameter("procedureName");
-        if(procedureName==null||procedureName.equals("")) {
+        if (procedureName == null || procedureName.equals("")) {
             return "/doctor/addProcedure.jsp";
         }
         Integer doctor_id = Integer.valueOf(request.getParameter("doctor"));
         String type = request.getParameter("type");
         try {
             proceduresService.addProcedures(procedureName, doctor_id, id, type);
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
             return "/doctor/addProcedure.jsp";
         }

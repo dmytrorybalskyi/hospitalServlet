@@ -16,11 +16,12 @@ public class LocalFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
         String language = req.getParameter("lang");
-        if(language==null){
-            req.getSession().setAttribute("lang","en");
+        if (language == null && req.getSession().getAttribute("lang") == null) {
+            req.getSession().setAttribute("lang", "en");
+        } else {
+            req.getSession().setAttribute("lang", language);
         }
-        req.getSession().setAttribute("lang",language);
-        filterChain.doFilter(req,resp);
+        filterChain.doFilter(req, resp);
     }
 
     @Override

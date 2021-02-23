@@ -2,6 +2,7 @@ package org.example.comands;
 
 import org.example.model.entity.Account;
 import org.example.service.AccountService;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 
@@ -23,7 +24,7 @@ public class LoginCommand implements Command {
         }
 
         Account account = accountService.findByLogin(login);
-        if (account.getLogin() == null||!account.getPassword().equals(password)) {
+        if (account == null || !account.getPassword().equals(password)) {
             return "/login.jsp";
         }
 
@@ -32,7 +33,7 @@ public class LoginCommand implements Command {
         loggedUsers.add(account);
         request.getSession().setAttribute("account", account);
         request.getSession().getServletContext().setAttribute("loggedUsers", loggedUsers);
-        return "redirect:" + account.getRole().name()+"/"+account.getRole().name();
+        return "redirect:" + account.getRole().name() + "/" + account.getRole().name();
     }
 
 }

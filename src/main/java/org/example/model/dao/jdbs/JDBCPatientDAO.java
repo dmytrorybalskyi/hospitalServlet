@@ -17,7 +17,7 @@ public class JDBCPatientDAO implements PatientDAO {
     }
 
     @Override
-    public Patient create(Patient patient) throws SQLException{
+    public Patient create(Patient patient) throws SQLException {
         PreparedStatement preparedStatement = null;
         String query = "INSERT INTO patient (account_id, name, age) VALUES(?,?,?)";
         try {
@@ -56,42 +56,43 @@ public class JDBCPatientDAO implements PatientDAO {
     public boolean update(Patient patient) {
         String query = "UPDATE patient SET doctor_account_id = ? WHERE account_id = ?";
         PreparedStatement preparedStatement = null;
-        try{
+        try {
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1,patient.getDoctor().getId());
-            preparedStatement.setInt(2,patient.getId());
+            preparedStatement.setInt(1, patient.getDoctor().getId());
+            preparedStatement.setInt(2, patient.getId());
             preparedStatement.executeUpdate();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
-        }finally {
+        } finally {
             close(preparedStatement);
-        }return true;
+        }
+        return true;
     }
 
     @Override
     public boolean removeDoctor(Patient patient) {
         String query = "UPDATE patient SET doctor_account_id = null WHERE account_id = ?";
         PreparedStatement preparedStatement = null;
-        try{
+        try {
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1,patient.getId());
+            preparedStatement.setInt(1, patient.getId());
             preparedStatement.executeUpdate();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
             return false;
-        }finally {
+        } finally {
             close(preparedStatement);
-        }return true;
+        }
+        return true;
     }
-
 
 
     @Override
     public void close(ResultSet resultSet) {
         try {
-            if(resultSet!=null)
+            if (resultSet != null)
                 resultSet.close();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getErrorCode());
         }
     }
@@ -99,19 +100,19 @@ public class JDBCPatientDAO implements PatientDAO {
     @Override
     public void close(PreparedStatement preparedStatement) {
         try {
-            if(preparedStatement!=null)
+            if (preparedStatement != null)
                 preparedStatement.close();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getErrorCode());
         }
     }
 
     @Override
-    public void close(){
+    public void close() {
         try {
-            if(connection!=null)
+            if (connection != null)
                 connection.close();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getErrorCode());
         }
     }

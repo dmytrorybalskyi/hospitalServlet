@@ -3,8 +3,8 @@ package org.example.model.entity;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Page {
-    private List<Treatment> list = new LinkedList();
+public class Page<T> {
+    private List<T> list = new LinkedList<T>();
     private int objectsOnPage = 3;
     private int page;
     private int totalPages;
@@ -15,11 +15,11 @@ public class Page {
         this.page = page;
     }
 
-    public List getList() {
+    public List<T> getList() {
         return list;
     }
 
-    public void setList(List list) {
+    public void setList(List<T> list) {
         this.list = list;
     }
 

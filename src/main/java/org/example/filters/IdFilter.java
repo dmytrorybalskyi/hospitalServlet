@@ -15,10 +15,10 @@ public class IdFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
-        String path =  req.getRequestURI();
-        Integer id = Integer.valueOf(path.replaceAll(".*/",""));
-        req.getSession().setAttribute("id",id);
-        filterChain.doFilter(req,resp);
+        String path = req.getRequestURI();
+        Integer id = Integer.valueOf(path.replaceAll(".*/", ""));
+        req.getSession().setAttribute("id", id);
+        filterChain.doFilter(req, resp);
     }
 
     @Override

@@ -10,7 +10,7 @@ import java.util.Deque;
 
 public interface TreatmentDAO extends GenericDAO<Treatment> {
 
-    boolean setDoctor(Treatment treatment, Integer doctorId);
+    boolean setDoctor(Treatment treatment, Integer doctorId) throws SQLException;
 
     boolean isAppointment(Integer patientAccountId);
 

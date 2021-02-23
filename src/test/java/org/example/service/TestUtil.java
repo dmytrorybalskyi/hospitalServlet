@@ -22,6 +22,22 @@ public class TestUtil {
         return patientID;
     }
 
+    public Integer createTestPatientAccount2(Connection con) throws SQLException {
+        Integer patientID = null;
+        PreparedStatement p = con.prepareStatement("INSERT INTO account (login,password,role) VALUES(?,?,?)", Statement.RETURN_GENERATED_KEYS);
+        p.setString(1, "testPatient2");
+        p.setString(2, "testPatient2");
+        p.setString(3, "patient");
+        p.executeUpdate();
+        ResultSet resultSet = p.getGeneratedKeys();
+        if (resultSet.next()) {
+            patientID = resultSet.getInt(1);
+        }
+        resultSet.close();
+        p.close();
+        return patientID;
+    }
+
     public Integer createTestDoctorAccount(Connection con) throws SQLException {
         Integer doctorID = null;
         PreparedStatement p = con.prepareStatement("INSERT INTO account (login,password,role) VALUES(?,?,?)", Statement.RETURN_GENERATED_KEYS);
@@ -112,6 +128,24 @@ public class TestUtil {
         return treatmentID;
     }
 
+
+    public Integer createTestTreatmentRegistration(Connection con,Integer patientID,Integer doctorID,Integer categoryID) throws SQLException {
+        Integer treatmentID = null;
+        PreparedStatement p = con.prepareStatement("INSERT INTO treatment (patient_account_id,doctor_account_id,category_id,treatment_status) VALUES(?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+        p.setInt(1, patientID);
+        p.setInt(2, doctorID);
+        p.setInt(3, categoryID);
+        p.setString(4, "registration");
+        p.executeUpdate();
+        ResultSet resultSet = p.getGeneratedKeys();
+        if (resultSet.next()) {
+            treatmentID = resultSet.getInt(1);
+        }
+        resultSet.close();
+        p.close();
+        return treatmentID;
+    }
+
     public Integer createTestProcedure(Connection con,Integer treatmentID,Integer doctorID) throws SQLException {
         Integer procedureID = null;
         PreparedStatement p = con.prepareStatement("INSERT INTO procedures (name,treatment_id,doctor_account_id,type,procedure_status) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
@@ -166,6 +200,13 @@ public class TestUtil {
     public void deletePatientAccount(Connection con) throws SQLException {
         PreparedStatement p = con.prepareStatement("DELETE FROM account WHERE login = ?");
         p.setString(1, "testPatient");
+        p.executeUpdate();
+        p.close();
+    }
+
+    public void deletePatientAccount2(Connection con) throws SQLException {
+        PreparedStatement p = con.prepareStatement("DELETE FROM account WHERE login = ?");
+        p.setString(1, "testPatient2");
         p.executeUpdate();
         p.close();
     }

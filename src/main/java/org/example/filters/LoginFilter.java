@@ -20,14 +20,14 @@ public class LoginFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
         Account account = (Account) req.getSession().getAttribute("account");
-        if(account!=null){
+        if (account != null) {
             HashSet<Account> loggedUsers = (HashSet<Account>) req.getSession()
                     .getServletContext().getAttribute("loggedUsers");
             loggedUsers.remove(account);
-            req.getSession().setAttribute("account",null);
+            req.getSession().setAttribute("account", null);
             req.getSession().getServletContext().setAttribute("loggedUsers", loggedUsers);
         }
-        filterChain.doFilter(req,resp);
+        filterChain.doFilter(req, resp);
     }
 
     @Override

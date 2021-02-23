@@ -14,6 +14,8 @@ import static org.junit.Assert.*;
 public class TreatmentServiceTest {
     private static Integer doctorID;
     private static Integer patientID;
+    private static Integer patientID2;
+    private static Integer treatmentID2;
     private static Integer treatmentID;
     private static Integer categoryID;
     private static Integer procedureID;
@@ -25,13 +27,23 @@ public class TreatmentServiceTest {
         Connection connection = ConnectionPoolHolder.getConnection();
         TestUtil testUtil = new TestUtil();
         patientID = testUtil.createTestPatientAccount(connection);
+        patientID2 = testUtil.createTestPatientAccount2(connection);
         categoryID = testUtil.createTestCategory(connection);
         doctorID = testUtil.createTestDoctorAccount(connection);
         testUtil.createTestDoctor(connection, doctorID, categoryID);
         testUtil.createTestPatient(connection, patientID);
+        testUtil.createTestPatient(connection, patientID2);
+        treatmentID2 = testUtil.createTestTreatmentRegistration(connection, patientID2, doctorID, categoryID);
         treatmentID = testUtil.createTestTreatment(connection, patientID, doctorID, categoryID);
         procedureID = testUtil.createTestProcedure(connection, treatmentID, doctorID);
         connection.close();
+    }
+
+    @Test
+    public void discharge() throws SQLException {
+        boolean discharge = treatmentService.discharge(doctorID, patientID, treatmentID);
+        assertTrue(discharge);
+        assertEquals("done", treatmentService.findById(treatmentID).getStatus().name());
     }
 
     @Test
@@ -41,8 +53,8 @@ public class TreatmentServiceTest {
         assertEquals(expectedPatientName, actualPatientName);
     }
 
-    @Test
-    public void setDoctor() {
+    @Test(expected = SQLException.class)
+    public void setDoctor() throws SQLException {
         Treatment treatment = treatmentService.findById(treatmentID);
         assertTrue(treatmentService.setDoctor(treatment, doctorID));
     }
@@ -69,23 +81,17 @@ public class TreatmentServiceTest {
     }
 
     @Test
+    public void getPageByStatus() {
+        Page<Treatment> page = treatmentService.getPageByStatus(new Page(0));
+        assertEquals(1, page.getList().size());
+        assertEquals("registration",page.getList().get(0).getStatus().name());
+    }
+
+    @Test
     public void getTreatmentByPatient() {
         Treatment actual = treatmentService.getTreatmentByPatient(new Account(patientID));
         Treatment expected = treatmentService.findById(treatmentID);
         assertEquals(expected.getId(), actual.getId());
-    }
-
-    @Test
-    public void discharge() throws SQLException {
-        boolean discharge = treatmentService.discharge(doctorID, patientID, treatmentID);
-        assertTrue(discharge);
-        assertEquals("done", treatmentService.findById(treatmentID).getStatus().name());
-    }
-
-    @Test
-    public void getPageByStatus() {
-        Page page = treatmentService.getPageByStatus(new Page(0));
-        assertEquals(0, page.getList().size());
     }
 
     @AfterClass
@@ -94,10 +100,13 @@ public class TreatmentServiceTest {
         TestUtil testUtil = new TestUtil();
         testUtil.deleteProcedure(connection, procedureID);
         testUtil.deleteTreatment(connection, treatmentID);
+        testUtil.deleteTreatment(connection, treatmentID2);
         testUtil.deletePatient(connection, patientID);
+        testUtil.deletePatient(connection, patientID2);
         testUtil.deleteDoctor(connection, doctorID);
         testUtil.deleteDoctorAccount(connection);
         testUtil.deletePatientAccount(connection);
+        testUtil.deletePatientAccount2(connection);
         testUtil.deleteCategory(connection, categoryID);
         connection.close();
 

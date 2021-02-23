@@ -21,16 +21,24 @@ public class JDBCDAOFactory extends DAOFactory {
     }
 
     @Override
-    public CategoryDAO createCategoryDAO() { return new JDBCCategoryDAO(getConnection()); }
+    public CategoryDAO createCategoryDAO() {
+        return new JDBCCategoryDAO(getConnection());
+    }
 
     @Override
-    public TreatmentDAO createTreatmentDAO() { return new JDBCTreatmentDAO(getConnection()); }
+    public TreatmentDAO createTreatmentDAO() {
+        return new JDBCTreatmentDAO(getConnection());
+    }
 
     @Override
-    public DoctorDAO createDoctorDAO() { return new JDBCDoctorDAO(getConnection()); }
+    public DoctorDAO createDoctorDAO() {
+        return new JDBCDoctorDAO(getConnection());
+    }
 
     @Override
-    public ProceduresDAO createProceduresDAO() { return  new JDBCProceduresDAO(getConnection()); }
+    public ProceduresDAO createProceduresDAO() {
+        return new JDBCProceduresDAO(getConnection());
+    }
 
     private Connection getConnection() {
         try {

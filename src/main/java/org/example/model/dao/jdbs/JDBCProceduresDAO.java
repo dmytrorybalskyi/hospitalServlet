@@ -26,24 +26,25 @@ public class JDBCProceduresDAO implements ProceduresDAO {
         try {
             JDBCDoctorDAO jdbcDoctorDAO = new JDBCDoctorDAO(connection);
             Doctor doctor = jdbcDoctorDAO.finById(procedures.getDoctor().getId());
-            if(doctor.getCategory().getId()==5&&procedures.getType().name().equals("operation")){
+            if (doctor.getCategory().getId() == 5 && procedures.getType().name().equals("operation")) {
                 throw new SQLException("Nurse cannot do operation");
             }
             preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1,procedures.getName());
-            preparedStatement.setInt(2,procedures.getTreatment().getId());
-            preparedStatement.setInt(3,procedures.getDoctor().getId());
-            preparedStatement.setString(4,procedures.getType().name());
-            preparedStatement.setString(5,procedures.getStatus().name());
+            preparedStatement.setString(1, procedures.getName());
+            preparedStatement.setInt(2, procedures.getTreatment().getId());
+            preparedStatement.setInt(3, procedures.getDoctor().getId());
+            preparedStatement.setString(4, procedures.getType().name());
+            preparedStatement.setString(5, procedures.getStatus().name());
             preparedStatement.executeUpdate();
             resultSet = preparedStatement.getGeneratedKeys();
-            if(resultSet.next()){
+            if (resultSet.next()) {
                 procedures.setId(resultSet.getInt(1));
             }
             return procedures;
-        }catch (SQLException e){
-            throw  new SQLException(e);
-        }finally {
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        } finally {
+            close(resultSet);
             close(preparedStatement);
             close();
         }
@@ -54,24 +55,24 @@ public class JDBCProceduresDAO implements ProceduresDAO {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         List<Procedures> proceduresList = new LinkedList<>();
-       // String query = "SELECT * FROM procedures WHERE doctor_account_id = ? AND procedure_status = ?";
         String query = "SELECT * FROM procedures LEFT JOIN treatment ON treatment_id = treatment.id LEFT JOIN patient ON treatment.patient_account_id = patient.account_id WHERE procedures.doctor_account_id = ? AND procedure_status = ?";
         try {
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1,id);
+            preparedStatement.setInt(1, id);
             preparedStatement.setString(2, Status.treatment.name());
             resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 proceduresList.add(proceduresMapper.extractFromResultSetWihPatient(resultSet));
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
             return null;
-        }finally {
+        } finally {
             close(resultSet);
             close(preparedStatement);
             close();
-        }return proceduresList;
+        }
+        return proceduresList;
     }
 
     @Override
@@ -80,16 +81,17 @@ public class JDBCProceduresDAO implements ProceduresDAO {
         String query = "UPDATE procedures  SET procedure_status = ? WHERE id = ?";
         try {
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1,Status.done.name());
-            preparedStatement.setInt(2,id);
+            preparedStatement.setString(1, Status.done.name());
+            preparedStatement.setInt(2, id);
             preparedStatement.executeUpdate();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
             return false;
-        }finally {
+        } finally {
             close(preparedStatement);
             close();
-        }return true;
+        }
+        return true;
     }
 
     @Override
@@ -129,7 +131,7 @@ public class JDBCProceduresDAO implements ProceduresDAO {
     @Override
     public void close(PreparedStatement preparedStatement) {
         try {
-            if(preparedStatement!=null) {
+            if (preparedStatement != null) {
                 preparedStatement.close();
             }
         } catch (SQLException e) {

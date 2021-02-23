@@ -50,15 +50,13 @@ public class JDBCDoctorDAO implements DoctorDAO {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         List result = new ArrayList();
-        String query = "SELECT * FROM doctor WHERE category_id = ?";
+        String query = "SELECT * FROM doctor LEFT JOIN category ON category_id = category.id WHERE category_id = ?";
         try {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, category.getId());
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Doctor doctor = new Doctor(resultSet.getString(2), new Category(resultSet.getInt(4)));
-                doctor.setAccount(new Account(resultSet.getInt(1)));
-                result.add(doctor);
+                result.add(doctorMapper.extractFromResultSet(resultSet));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -78,19 +76,20 @@ public class JDBCDoctorDAO implements DoctorDAO {
         String query = "SELECT * FROM doctor LEFT JOIN category ON category_id = category.id WHERE category_id = ? OR category_id = ?";
         try {
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1,categoryId);
-            preparedStatement.setInt(2,5);
+            preparedStatement.setInt(1, categoryId);
+            preparedStatement.setInt(2, 5);
             resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()){
-               doctorList.add(doctorMapper.extractFromResultSet(resultSet));
+            while (resultSet.next()) {
+                doctorList.add(doctorMapper.extractFromResultSet(resultSet));
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
-        }finally {
+        } finally {
             close(resultSet);
             close(preparedStatement);
             close();
-        }return doctorList;
+        }
+        return doctorList;
     }
 
     @Override
@@ -100,17 +99,18 @@ public class JDBCDoctorDAO implements DoctorDAO {
         String query = "SELECT * FROM doctor LEFT JOIN category ON category_id = id WHERE account_id = ?";
         try {
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1,id);
+            preparedStatement.setInt(1, id);
             resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()){
+            if (resultSet.next()) {
                 return doctorMapper.extractFromResultSet(resultSet);
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
-        }finally {
+        } finally {
             close(resultSet);
             close(preparedStatement);
-        }return null;
+        }
+        return null;
     }
 
     @Override
@@ -124,29 +124,31 @@ public class JDBCDoctorDAO implements DoctorDAO {
         String query = "UPDATE Doctor  SET patients_number = ? WHERE account_id = ?";
         try {
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1,doctor.getPatientNumber());
-            preparedStatement.setInt(2,doctor.getAccount().getId());
+            preparedStatement.setInt(1, doctor.getPatientNumber());
+            preparedStatement.setInt(2, doctor.getAccount().getId());
             preparedStatement.executeUpdate();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
-        }finally {
+        } finally {
             close(preparedStatement);
-        }return true;
+        }
+        return true;
     }
 
-    public boolean changePatientNumber(Integer doctor_account_id, int patientNumber){
+    public boolean changePatientNumber(Integer doctor_account_id, int patientNumber) {
         PreparedStatement preparedStatement = null;
         String query = "UPDATE Doctor  SET patients_number = patients_number + ? WHERE account_id = ?";
         try {
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1,patientNumber);
-            preparedStatement.setInt(2,doctor_account_id);
+            preparedStatement.setInt(1, patientNumber);
+            preparedStatement.setInt(2, doctor_account_id);
             preparedStatement.executeUpdate();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
-        }finally {
+        } finally {
             close(preparedStatement);
-        }return true;
+        }
+        return true;
     }
 
     @Override
