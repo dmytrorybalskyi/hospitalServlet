@@ -51,12 +51,6 @@ public class DoctorServiceTest {
         assertEquals(expected, actual);
     }
 
-    @Test
-    public void findByCategoryAndNurse() {
-        List<Doctor> doctorList1 = doctorService.getAllByCategoryAndNurse(categoryID);
-        List<Doctor> doctorList2 = doctorService.findByCategory(new Category(categoryID));
-        assertTrue(doctorList1.size()>doctorList2.size());
-    }
 
     @AfterClass
     public static void afterTest() throws SQLException {

@@ -72,6 +72,9 @@
         <p><fmt:message key="label.ageInvalid"/></p>
     </c:if>
     <button type="submit"><fmt:message key="label.register"/> </button>
+    <c:if test="${exist==true}">
+        <p><fmt:message key="label.exist"/></p>
+    </c:if>
 </form>
 </body>
 </html>
