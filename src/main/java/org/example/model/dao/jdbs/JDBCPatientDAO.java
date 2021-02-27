@@ -22,7 +22,7 @@ public class JDBCPatientDAO implements PatientDAO {
         String query = "INSERT INTO patient (account_id, name, age) VALUES(?,?,?)";
         try {
             connection.setAutoCommit(false);
-            connection.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
             JDBCAccountDAO jdbcAccountDAO = new JDBCAccountDAO(connection);
             patient.setAccount(jdbcAccountDAO.create(patient.getAccount()));
             preparedStatement = connection.prepareStatement(query);

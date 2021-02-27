@@ -29,7 +29,7 @@ public class JDBCTreatmentDAO implements TreatmentDAO {
         ResultSet resultSet = null;
         try {
             connection.setAutoCommit(false);
-            connection.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
             if (!isAppointment(treatment.getPatient().getId())) {
                 close();
                 throw new SQLException("you already appointment");
@@ -85,7 +85,7 @@ public class JDBCTreatmentDAO implements TreatmentDAO {
         String query = "UPDATE treatment SET doctor_account_id = ?, treatment_status = ? WHERE id = ?";
         try {
             connection.setAutoCommit(false);
-            connection.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
             checkStatus(treatment.getId());
             JDBCDoctorDAO jdbcDoctorDAO = new JDBCDoctorDAO(connection);
             JDBCPatientDAO jdbcPatientDAO = new JDBCPatientDAO(connection);
@@ -290,7 +290,7 @@ public class JDBCTreatmentDAO implements TreatmentDAO {
         String query = "UPDATE treatment  SET treatment_status = ? WHERE id = ?";
         try {
             connection.setAutoCommit(false);
-            connection.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
             JDBCDoctorDAO jdbcDoctorDAO = new JDBCDoctorDAO(connection);
             JDBCPatientDAO jdbcPatientDAO = new JDBCPatientDAO(connection);
             preparedStatement = connection.prepareStatement(query);

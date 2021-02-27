@@ -27,7 +27,7 @@ public class JDBCDoctorDAO implements DoctorDAO {
         String query = "INSERT INTO doctor (account_id, name, category_id) VALUES(?,?,?)";
         try {
             connection.setAutoCommit(false);
-            connection.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
             JDBCAccountDAO jdbcAccountDAO = new JDBCAccountDAO(connection);
             doctor.setAccount(jdbcAccountDAO.create(doctor.getAccount()));
             preparedStatement = connection.prepareStatement(query);
