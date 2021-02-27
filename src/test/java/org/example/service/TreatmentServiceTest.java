@@ -83,16 +83,9 @@ public class TreatmentServiceTest {
     @Test
     public void getPageByStatus() {
         Page<Treatment> page = treatmentService.getPageByStatus(new Page(0));
-        assertEquals(1, page.getList().size());
         assertEquals("registration",page.getList().get(0).getStatus().name());
     }
 
-    @Test
-    public void getTreatmentByPatient() {
-        Treatment actual = treatmentService.getTreatmentByPatient(new Account(patientID));
-        Treatment expected = treatmentService.findById(treatmentID);
-        assertEquals(expected.getId(), actual.getId());
-    }
 
     @AfterClass
     public static void afterTest() throws SQLException {

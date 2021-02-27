@@ -7,6 +7,7 @@ import org.example.model.entity.Status;
 import org.example.model.mapper.ProceduresMapper;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class JDBCProceduresDAO implements ProceduresDAO {
         try {
             JDBCDoctorDAO jdbcDoctorDAO = new JDBCDoctorDAO(connection);
             Doctor doctor = jdbcDoctorDAO.finById(procedures.getDoctor().getId());
-            if (doctor.getCategory().getId() == 5 && procedures.getType().name().equals("operation")) {
+            if (doctor.getCategory().getId() == 4 && procedures.getType().name().equals("operation")) {
                 throw new SQLException("Nurse cannot do operation");
             }
             preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -55,7 +56,8 @@ public class JDBCProceduresDAO implements ProceduresDAO {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         List<Procedures> proceduresList = new LinkedList<>();
-        String query = "SELECT * FROM procedures LEFT JOIN treatment ON treatment_id = treatment.id LEFT JOIN patient ON treatment.patient_account_id = patient.account_id WHERE procedures.doctor_account_id = ? AND procedure_status = ?";
+        String query = "SELECT * FROM procedures LEFT JOIN treatment ON treatment_id = treatment.id LEFT JOIN" +
+                " patient ON treatment.patient_account_id = patient.account_id WHERE procedures.doctor_account_id = ? AND procedure_status = ?";
         try {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
@@ -100,11 +102,6 @@ public class JDBCProceduresDAO implements ProceduresDAO {
     }
 
     @Override
-    public List<Procedures> findAll() {
-        return null;
-    }
-
-    @Override
     public boolean update(Procedures entity) {
         return false;
     }
@@ -122,6 +119,7 @@ public class JDBCProceduresDAO implements ProceduresDAO {
     @Override
     public void close(ResultSet resultSet) {
         try {
+            if(resultSet!=null)
             resultSet.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());

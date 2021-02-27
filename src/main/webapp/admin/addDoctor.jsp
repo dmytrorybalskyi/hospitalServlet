@@ -92,9 +92,9 @@
             </c:forEach>
         </select>
     <button type="submit"><fmt:message key="label.register"/></button>
-           <c:if test="${message==true}">
-                 <p></p>
-           </c:if>
+    <c:if test="${exist==true}">
+        <p><fmt:message key="label.exist"/></p>
+    </c:if>
 </form>
 </div>
 <div class="col-5">

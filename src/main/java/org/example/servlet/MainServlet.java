@@ -47,13 +47,10 @@ public class MainServlet extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String path = request.getRequestURI();
-        System.out.println(path);
         path = path.replaceFirst("/", "").replaceAll("/page=\\d+","")
                 .replaceAll("/\\d+","");
-        System.out.println(path);
         Command command = commands.getOrDefault(path,
                 (r) -> "/index.jsp");
-        System.out.println(command.getClass().getName());
         String page = command.execute(request);
         if (page.contains("redirect:")) {
             response.sendRedirect(page.replace("redirect:", "/"));

@@ -107,8 +107,8 @@
                                  <td>${procedures.status}</td>
                                  </tr>
                                  </form>
-                         </table>
                 </c:forEach>
+                         </table>
     </div>
     <div class="col-3">
     </div>

@@ -67,7 +67,7 @@
                        <td><b><fmt:message key="label.name"/></b></td>
                        <td><b><fmt:message key="label.procedure"/></b></td>
                        <td><b><fmt:message key="label.type"/></b></td>
-                       <td><fmt:message key="label.status"/></td>
+                       <td><b><fmt:message key="label.status"/></b></td>
                        <td></td>
                    </tr>
               </thead>

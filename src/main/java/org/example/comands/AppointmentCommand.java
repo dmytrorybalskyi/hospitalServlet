@@ -4,9 +4,11 @@ import org.example.model.entity.Account;
 import org.example.service.TreatmentService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.logging.Logger;
 
 public class AppointmentCommand implements Command {
     private TreatmentService treatmentService = new TreatmentService();
+    private static Logger log = Logger.getLogger(DischargeCommand.class.getName());
 
     @Override
     public String execute(HttpServletRequest request) {
@@ -18,7 +20,7 @@ public class AppointmentCommand implements Command {
         try {
             treatmentService.createTreatment(account, categoryId);
         } catch (Exception e) {
-            System.out.println("Patient already appointment");
+            log.info("Patient #"+account.getId()+"--> already appointment");
             request.setAttribute("message", true);
             return "/patient/patient";
         }

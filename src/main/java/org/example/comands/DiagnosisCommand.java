@@ -12,6 +12,6 @@ public class DiagnosisCommand implements Command {
         String diagnosis = request.getParameter("diagnosis");
         Integer id = Integer.valueOf(request.getParameter("treatment_id"));
         treatmentService.setDiagnosis(diagnosis, id);
-        return "/doctor/doctor";
+        return "redirect:doctor/doctor";
     }
 }

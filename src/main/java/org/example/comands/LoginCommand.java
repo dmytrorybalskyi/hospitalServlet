@@ -5,6 +5,7 @@ import org.example.service.AccountService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
+import java.util.logging.Logger;
 
 public class LoginCommand implements Command {
     private AccountService accountService = new AccountService();

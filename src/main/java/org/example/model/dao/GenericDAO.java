@@ -9,7 +9,7 @@ import java.util.List;
 public interface GenericDAO<T> extends AutoCloseable{
     T create (T entity) throws SQLException;
     T finById(int id);
-    List<T> findAll();
+   // List<T> findAll();
     boolean update(T entity);
     void close();
     void close(ResultSet resultSet);

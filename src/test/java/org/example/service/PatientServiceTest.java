@@ -4,9 +4,7 @@ import org.example.model.dao.ConnectionPoolHolder;
 import org.junit.AfterClass;
 import org.junit.Test;
 import java.sql.*;
-
 import static org.junit.Assert.assertEquals;
-
 
 public class PatientServiceTest {
     public static int id;

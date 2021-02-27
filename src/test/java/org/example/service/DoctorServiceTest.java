@@ -7,6 +7,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import javax.validation.constraints.AssertTrue;
 import java.sql.*;
 
 import static org.junit.Assert.assertEquals;
@@ -51,24 +52,11 @@ public class DoctorServiceTest {
     }
 
     @Test
-    public void getAllByCategoryAndNurse() {
-        List<Doctor> doctorList = doctorService.getAllByCategoryAndNurse(categoryID);
-        String expected1 = "testDoctor";
-        String expected2 = NURSE_LOGIN_PASSWORD_NAME;
-        boolean doctorByCategory = false;
-        boolean nurse = false;
-        for (Doctor d : doctorList) {
-            if (d.getName().equals(expected1)) {
-                doctorByCategory = true;
-            }
-            if (d.getName().equals(expected2)) {
-                nurse = true;
-            }
-        }
-        assertTrue(doctorByCategory);
-        assertTrue(nurse);
+    public void findByCategoryAndNurse() {
+        List<Doctor> doctorList1 = doctorService.getAllByCategoryAndNurse(categoryID);
+        List<Doctor> doctorList2 = doctorService.findByCategory(new Category(categoryID));
+        assertTrue(doctorList1.size()>doctorList2.size());
     }
-
 
     @AfterClass
     public static void afterTest() throws SQLException {

@@ -1,6 +1,5 @@
 package org.example.service;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.sql.*;
 
 public class TestUtil {
@@ -96,8 +95,8 @@ public class TestUtil {
     public void createTestNurse(Connection con,Integer nurseID) throws SQLException {
         PreparedStatement p = con.prepareStatement("INSERT INTO doctor (account_id,name,category_id) VALUES(?,?,?)");
         p.setInt(1, nurseID);
-        p.setString(2, "testNurse");
-        p.setInt(3, 5);
+        p.setString(2, DoctorServiceTest.NURSE_LOGIN_PASSWORD_NAME);
+        p.setInt(3, 4);
         p.executeUpdate();
         p.close();
     }

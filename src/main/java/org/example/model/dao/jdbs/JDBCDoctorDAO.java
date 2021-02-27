@@ -6,10 +6,12 @@ import org.example.model.entity.Category;
 import org.example.model.entity.Doctor;
 import org.example.model.mapper.DoctorMapper;
 
+import javax.swing.text.html.Option;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class JDBCDoctorDAO implements DoctorDAO {
     private Connection connection;
@@ -77,7 +79,7 @@ public class JDBCDoctorDAO implements DoctorDAO {
         try {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, categoryId);
-            preparedStatement.setInt(2, 5);
+            preparedStatement.setInt(2, 4);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 doctorList.add(doctorMapper.extractFromResultSet(resultSet));
@@ -114,11 +116,6 @@ public class JDBCDoctorDAO implements DoctorDAO {
     }
 
     @Override
-    public List<Doctor> findAll() {
-        return null;
-    }
-
-    @Override
     public boolean update(Doctor doctor) {
         PreparedStatement preparedStatement = null;
         String query = "UPDATE Doctor  SET patients_number = ? WHERE account_id = ?";
@@ -135,6 +132,7 @@ public class JDBCDoctorDAO implements DoctorDAO {
         return true;
     }
 
+    @Override
     public boolean changePatientNumber(Integer doctor_account_id, int patientNumber) {
         PreparedStatement preparedStatement = null;
         String query = "UPDATE Doctor  SET patients_number = patients_number + ? WHERE account_id = ?";

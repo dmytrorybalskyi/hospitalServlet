@@ -4,10 +4,12 @@ import org.example.service.CategoryService;
 import org.example.service.DoctorService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.logging.Logger;
 
 public class DoctorRegistrationCommand implements Command {
     private CategoryService categoryService = new CategoryService();
     private DoctorService doctorService = new DoctorService();
+    private static Logger log = Logger.getLogger(DoctorPageCommand.class.getName());
 
     @Override
     public String execute(HttpServletRequest request) {
@@ -34,7 +36,8 @@ public class DoctorRegistrationCommand implements Command {
             doctorService.addDoctor(login, password, name, categoryId);
             return "redirect:admin/admin";
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            request.setAttribute("exist",true);
+            log.info("Registration denied login: "+login+" -> already exist");
             return "/admin/addDoctor.jsp";
         }
 

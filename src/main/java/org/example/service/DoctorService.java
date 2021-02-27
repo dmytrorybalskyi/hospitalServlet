@@ -1,10 +1,7 @@
 package org.example.service;
 
-import org.example.model.dao.ConnectionPoolHolder;
 import org.example.model.dao.DAOFactory;
 import org.example.model.dao.DoctorDAO;
-import org.example.model.dao.jdbs.JDBCAccountDAO;
-import org.example.model.dao.jdbs.JDBCDoctorDAO;
 import org.example.model.entity.Account;
 import org.example.model.entity.Category;
 import org.example.model.entity.Doctor;
@@ -29,7 +26,7 @@ public class DoctorService {
     public Doctor addDoctor(String login, String password, String name, Integer categoryId) throws SQLException {
         Account account = new Account(login, password);
         account.setRole(Roles.doctor);
-        if(categoryId==5){
+        if(categoryId==4){
             account.setRole(Roles.nurse);
         }
         Category category = new Category(categoryId);

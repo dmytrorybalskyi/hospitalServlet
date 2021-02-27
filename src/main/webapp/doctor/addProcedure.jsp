@@ -87,7 +87,9 @@
             </c:forEach>
         </select>
     <button type="submit"> <fmt:message key="label.add"/></button>
-    <p>${typeError}</p>
+    <c:if test="${sisterError==true}">
+        <p><fmt:message key="label.sisterError"/></p>
+    </c:if>
 </form>
 </div>
 <div class="col-5">

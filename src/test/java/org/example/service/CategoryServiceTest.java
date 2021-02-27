@@ -5,14 +5,13 @@ import org.junit.Test;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
 
-
 public class CategoryServiceTest {
     CategoryService categoryService = new CategoryService();
 
     @Test
     public void FindAll(){
         Category expected = new Category(2,"dentist");
-        int expectedSize = 6;
+        int expectedSize = 5;
         List<Category> categoryLint = categoryService.finAll();
         Category actual = categoryLint.get(categoryLint.indexOf(expected));
         assertEquals(expectedSize,categoryLint.size());
@@ -22,8 +21,8 @@ public class CategoryServiceTest {
 
     @Test
     public void FindAllWithoutNurse(){
-        Category nurse = new Category(5,"nurse");
-        int expectedSize = 5;
+        Category nurse = new Category(4,"nurse");
+        int expectedSize = 4;
         int expected = -1;
         List<Category> categoryList = categoryService.finAllWithoutNurse();
         assertEquals(expectedSize,categoryList.size());

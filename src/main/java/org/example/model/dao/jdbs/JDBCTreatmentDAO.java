@@ -112,7 +112,8 @@ public class JDBCTreatmentDAO implements TreatmentDAO {
     public Page pageByStatus(Page page) {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        String query = "SELECT * FROM treatment  LEFT JOIN patient ON patient_account_id = account_id LEFT JOIN category ON category_id = category.id  WHERE treatment_status = ? LIMIT ?, ?";
+        String query = "SELECT * FROM treatment  LEFT JOIN patient ON patient_account_id = account_id LEFT JOIN" +
+                " category ON category_id = category.id  WHERE treatment_status = ? LIMIT ?, ?";
         try {
             page = getPageNumber(page);
             preparedStatement = connection.prepareStatement(query);
@@ -212,7 +213,8 @@ public class JDBCTreatmentDAO implements TreatmentDAO {
     public Deque<Treatment> getAllByDoctorAndStatus(Account account) {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        String query = "SELECT * FROM treatment LEFT JOIN patient ON patient_account_id = account_id LEFT JOIN procedures ON treatment_id = treatment.id WHERE treatment.doctor_account_id = ? AND treatment_status = ?";
+        String query = "SELECT * FROM treatment LEFT JOIN patient ON patient_account_id = account_id LEFT JOIN" +
+                " procedures ON treatment_id = treatment.id WHERE treatment.doctor_account_id = ? AND treatment_status = ?";
         Deque<Treatment> treatmentDeque = new LinkedList<>();
         try {
             preparedStatement = connection.prepareStatement(query);
@@ -330,12 +332,6 @@ public class JDBCTreatmentDAO implements TreatmentDAO {
             close(preparedStatement);
         }
         return true;
-    }
-
-
-    @Override
-    public List<Treatment> findAll() {
-        return null;
     }
 
     @Override

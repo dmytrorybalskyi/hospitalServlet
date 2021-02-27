@@ -20,7 +20,7 @@ public class ConnectionPoolHolder {
                     }
 
                     BasicDataSource ds = new BasicDataSource();
-                    ds.setUrl("jdbc:mysql://localhost:3306/hospital?serverTimezone=Europe/Kiev");
+                    ds.setUrl("jdbc:mysql://localhost:3306/hospitalservlet?serverTimezone=Europe/Kiev");
                     ds.setUsername("root");
                     ds.setPassword("Xeraxera1997");
                     ds.setMinIdle(5);

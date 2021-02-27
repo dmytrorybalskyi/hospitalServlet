@@ -75,7 +75,7 @@
                         <td>${treatment.patient.name}</td>
                         <form action="/diagnosis" method="POST">
                             <td><input type="hidden" name="treatment_id" value="${treatment.id}"></td>
-                            <td><input type="text" name="diagnosis" value=${treatment.diagnosis}></td>
+                            <td><input type="text" name="diagnosis" value="${treatment.diagnosis}"></td>
                             <td><button type="submit" class="btn btn-primary"><fmt:message key="label.edit"/></button></td>
                         </form>
                         <td><a href="/doctor/addProcedure/${treatment.id}" class="btn btn-primary"><fmt:message key="label.addProcedure"/></a></td>

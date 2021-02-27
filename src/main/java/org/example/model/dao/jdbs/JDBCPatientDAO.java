@@ -48,11 +48,6 @@ public class JDBCPatientDAO implements PatientDAO {
     }
 
     @Override
-    public List<Patient> findAll() {
-        return null;
-    }
-
-    @Override
     public boolean update(Patient patient) {
         String query = "UPDATE patient SET doctor_account_id = ? WHERE account_id = ?";
         PreparedStatement preparedStatement = null;

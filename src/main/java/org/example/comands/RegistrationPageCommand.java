@@ -1,11 +1,16 @@
 package org.example.comands;
 
+
+
 import org.example.service.PatientService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.logging.Logger;
+
 
 public class RegistrationPageCommand implements Command {
     private PatientService patientService = new PatientService();
+    private static Logger log = Logger.getLogger(RegistrationPageCommand.class.getName());
 
     @Override
     public String execute(HttpServletRequest request) {
@@ -34,7 +39,8 @@ public class RegistrationPageCommand implements Command {
             patientService.addPatient(login, password, name, age);
             return "redirect:login";
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            request.setAttribute("exist",true);
+            log.info("Registration denied login: "+login+" -> already exist");
             return "/registration.jsp";
         }
     }

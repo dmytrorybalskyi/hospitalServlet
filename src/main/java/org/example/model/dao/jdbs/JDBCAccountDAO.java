@@ -20,7 +20,7 @@ public class JDBCAccountDAO implements AccountDAO {
 
 
     @Override
-    public Account create(Account account) {
+    public Account create(Account account) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         String query = "INSERT INTO account (login, password, role) VALUES(?,?,?)";
@@ -31,14 +31,12 @@ public class JDBCAccountDAO implements AccountDAO {
             preparedStatement.setString(3, account.getRole().name());
             preparedStatement.executeUpdate();
             resultSet = preparedStatement.getGeneratedKeys();
-            ;
             if (resultSet.next()) {
                 account.setId(resultSet.getInt(1));
             }
             return account;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            return null;
+            throw new SQLException(e.getMessage());
         } finally {
             close(preparedStatement);
             close(resultSet);
@@ -90,11 +88,6 @@ public class JDBCAccountDAO implements AccountDAO {
             close(rs);
             close(preparedStatement);
         }
-        return null;
-    }
-
-    @Override
-    public List<Account> findAll() {
         return null;
     }
 

@@ -2,7 +2,6 @@ package org.example.service;
 
 import org.example.model.dao.ConnectionPoolHolder;
 import org.example.model.entity.Procedures;
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -47,7 +46,7 @@ public class ProceduresServiceTest {
         assertEquals("treatment", procedures.getStatus().name());
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = SQLException.class)
     public void addProceduresByNurseAndOperation() throws SQLException {
         proceduresService.addProcedures("testProcedure", nurseID, treatmentID, "operation");
     }
